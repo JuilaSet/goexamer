@@ -1,0 +1,18 @@
+..\..\goexam.exe -i goroutine.bat
+exit
+
+title: test测试
+
+#B:l23
+
+[aaa]
+#batch0: hahaha
+#batch1: fafafa
+
+[测试1]
+#A: 嘿嘿嘿
+\@ext:kap
+\@link:~
+
+[]
+#count: 12
