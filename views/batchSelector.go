@@ -19,10 +19,13 @@ func FromBatch(batchGroup map[string]*store.Batch) (mainWindow MainWindow) {
 	var ws []Widget
 	var bmw = new(batchSelectorMainWindow)
 	for _, batch := range batchGroup {
-		name := batch.Name
+		name, text := batch.Name, batch.Name
+		if text == "" {
+			text = "<default batch>"
+		}
 		ws = append(ws, PushButton{
 			MinSize: Size{Width: 100, Height: 50},
-			Text: batch.Name,
+			Text: text,
 			OnClicked: func() {
 				communicator.Send(SelectPost, name)
 				bmw.Close()
@@ -32,7 +35,7 @@ func FromBatch(batchGroup map[string]*store.Batch) (mainWindow MainWindow) {
 	mainWindow = MainWindow{
 		AssignTo: &bmw.MainWindow,
 		Title:    "Batch Selector",
-		Size:     Size{Width: 600, Height: 400},
+		Size:     Size{Width: 300, Height: len(ws) * 50 + 5},
 		Layout:  VBox{},
 		Children: ws,
 	}

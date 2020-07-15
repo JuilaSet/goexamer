@@ -20,6 +20,10 @@ func Exam() {
 	var pItemQus, pItemAns, pStart, pFinish *router.State
 	var pSelectBatch, pNo, pYes func()
 	var curState *router.State
+
+	service.HelpMsg()
+	service.Title()
+
 	ioTrigger.ReadInput(func(msg *trigger.Msg, exit *bool) {
 		pNo = func() {}
 
@@ -27,24 +31,24 @@ func Exam() {
 			service.SelectYes()
 		}
 
+		pSelectBatch = func() {
+			service.Start(store.NewSelector(store.GetBatch(msg.Ctx)))
+		}
+
 		pFinish = router.NewState(func() {
 			service.FinishMsg()
 		}, func(input interface{}) {
 			switch input.(int) {
 			case views.SelectYes:
+				service.Restart()
+				curState = pItemQus
+			case views.SelectNo:
 				curState = pStart
 			case views.SelectPost:
 				pSelectBatch()
 				curState = pItemQus
-			default:
-				*exit = true
 			}
 		})
-
-		pSelectBatch = func() {
-			service.Start(store.NewSelector(store.GetBatch(msg.Ctx)))
-			service.Title()
-		}
 
 		pStart = router.NewState(func() {
 			service.HelpMsg()
@@ -91,6 +95,7 @@ func Exam() {
 				curState = pItemAns
 			}
 		})
+
 		if curState == nil {
 			curState = pStart
 		}

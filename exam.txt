@@ -13,3 +13,9 @@ title: title!
 
 [batchB-1]
 #kfc: hello
+
+[batchB-2]
+#kfc2: hello2
+
+[]
+#default: a

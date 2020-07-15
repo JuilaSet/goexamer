@@ -68,6 +68,12 @@ func init(){
 				Text: "Setting",
 				Items: []MenuItem{
 					Action{
+						Text: "Batch Selector",
+						OnTriggered: func() {
+							FromBatch(store.GetAllBatch()).Run()
+						},
+					},
+					Action{
 						AssignTo: &aFontSlider,
 						Text: "Font Size Slider",
 						OnTriggered: func() {
@@ -77,12 +83,6 @@ func init(){
 							} else {
 								aFontSlider.SetText("Font Size Slider")
 							}
-						},
-					},
-					Action{
-						Text: "Batch Selector",
-						OnTriggered: func() {
-							FromBatch(store.GetAllBatch()).Run()
 						},
 					},
 					Action{

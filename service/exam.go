@@ -31,6 +31,11 @@ func Start(s *store.Selector) {
 	output.Clear()
 }
 
+func Restart() {
+	selector.Init()
+	output.Clear()
+}
+
 func BatchName() {
 	batch := selector.Batch()
 	if batch.Name != "" {
