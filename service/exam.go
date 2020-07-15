@@ -222,14 +222,12 @@ func itemProcess(qus string, ans []string, lineCallBack func(string) (mid, after
 	}
 
 	output.Print("(y/N)-> ")
-	ioTrigger.Judge(func(r bool) {
-		if r {
-			batch.SetScore(qus, batch.GetScore(qus) - 1)
-			output.Println("√\n")
-		} else {
-			output.Println("×\n")
-		}
-	})
+	if ioTrigger.Judge() {
+		batch.SetScore(qus, batch.GetScore(qus) - 1)
+		output.Println("√\n")
+	} else {
+		output.Println("×\n")
+	}
 	output.Clear()
 
 	for _, aFunc := range afterActionFuncArray {
@@ -259,7 +257,7 @@ func title() {
 	curQus = ""
 
 	var actionFuncArray []func()
-	output.Print(func() (str string) {
+	output.SetTitle(func() (str string) {
 		getMidAndAfter(store.GetTitle(), func(mid, after func(), line string){
 			str += line + "\n"
 			actionFuncArray = append(actionFuncArray, mid)
@@ -267,11 +265,12 @@ func title() {
 		})
 		return
 	}())
+
 	if batch.Name != "" {
-		output.Println("---------------------")
+		output.Println("======================")
 		output.Println(" chapter: ", batch.Name)
+		output.Println("======================", "\n")
 	}
-	output.Println("---------------------\n")
 
 	// title不分前后计算action
 	for _, aFunc := range actionFuncArray {
@@ -280,7 +279,7 @@ func title() {
 }
 
 // 进行测试
-func Exam() string {
+func Exam() {
 	// 初始化数据
 	for qus := range batch.GetAllScore() {
 		batch.SetScore(qus, 1)
@@ -288,11 +287,11 @@ func Exam() string {
 	}
 	// 标题只在最开始执行
 	title()
-	return Review()
+	Review()
 }
 
 // 复习
-func Review() string {
+func Review() {
 	for qus, n := range batch.GetAllScore() {
 		Process(qus, n)
 	}
@@ -300,7 +299,6 @@ func Review() string {
 	for qus := range batch.GetAllScore() {
 		finishSet[qus] = false
 	}
-	return ""
 }
 
 // 单个项目测试过程
@@ -321,18 +319,11 @@ func Process(qus string, n int) {
 //	return ""
 //}
 
-// 打印开始
-func Logo() string {
-	output.Println("Exam Start!!\n")
-	return ""
-}
-
 // 初始化
-func Init(batchName string) string {
+func Init(batchName string) {
 	setBatch(batchName)
 	initBeforeAction()
 	initMidAction()
 	initAfterAction()
-	return ""
 }
 

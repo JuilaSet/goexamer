@@ -8,6 +8,7 @@ import (
 
 type OutPutter interface {
 	Clear()
+	SetTitle(title... string)
 	Print(...interface{})
 	Println(...interface{})
 }
@@ -21,6 +22,10 @@ func NewConsoleOutPutter() *ConsoleOutPutter {
 
 func (*ConsoleOutPutter) Clear(){
 	// 暂未实现
+}
+
+func (*ConsoleOutPutter) SetTitle(title... string) {
+	fmt.Print(title)
 }
 
 func (*ConsoleOutPutter) Print(str ...interface{}){
@@ -40,6 +45,10 @@ func NewGUIOutPutter() *GUIOutPutter {
 
 func (*GUIOutPutter) Clear() {
 	views.Clear()
+}
+
+func (*GUIOutPutter) SetTitle(title... string) {
+	views.SetTitle(title...)
 }
 
 func (*GUIOutPutter) Print(str ...interface{}){

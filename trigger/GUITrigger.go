@@ -17,9 +17,14 @@ func (*GUITrigger) Wait() {
 }
 
 // 判断是否错误
-func (*GUITrigger) Judge(callback func(bool)) {
+func (*GUITrigger) Judge() (b bool) {
 	views.SetText("\n")
-	callback(<-views.GetYesOrNo())
+	if views.SelectYes == <-views.GetYesOrNo() {
+		b = true
+	} else {
+		b = false
+	}
+	return
 }
 
 func (*GUITrigger) Init() {}

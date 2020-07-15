@@ -3,7 +3,6 @@ package controller
 import (
 	"goexamer/config"
 	"goexamer/io"
-	"goexamer/router"
 	"goexamer/service"
 	"goexamer/store"
 	"goexamer/trigger"
@@ -19,50 +18,33 @@ func init(){
 
 // 进行测试
 func Exam() {
-	// process
-	pLogo := router.BuildRouteFunc(service.Logo)
-	pExam := router.BuildRouteFunc(service.Exam)
-	pReview := router.BuildRouteFunc(func() string {
-		service.Review()
-		return ""
-	})
-
 	// router
-	var nextLogo, nextExam, nextReview router.NextFunc
-	nextLogo = func(lastStr string){
-		next := pLogo()
-		next(nextExam)
-	}
-	nextExam = func(string){
-		next := pExam()
+	var nextExam, nextReview func()
+	nextExam = func(){
+		output.Clear()
+		service.Exam()
 		// 检测是否还有错题
 		for _, n := range service.GetBatch().GetAllScore() {
 			if n > 0 {
-				output.Print("Review? (y/N)-> ")
-				ioTrigger.Judge(func(b bool) {
-					output.Clear()
-					if b {
-						next(nextReview)
-					} else {
-						next(nextLogo)
-					}
-				})
+				output.Clear()
+				if output.Print("Review? (y/N)-> "); ioTrigger.Judge() {
+					nextReview()
+				}
 				return
 			}
 		}
 	}
-	nextReview = func(string){
-		next := pReview()
+	nextReview = func(){
+		output.Clear()
+		service.Review()
 		// 检测是否还有错题
 		for _, n := range service.GetBatch().GetAllScore() {
 			if n > 0 {
+				output.Clear()
 				output.Print("Continue? (y/N)-> ")
-				ioTrigger.Judge(func(b bool) {
-					output.Clear()
-					if b {
-						next(nextReview)
-					}
-				})
+				if ioTrigger.Judge() {
+					nextReview()
+				}
 				return
 			}
 		}
@@ -71,15 +53,10 @@ func Exam() {
 	for {
 		for _, batch := range store.GetAllBatch() {
 			service.Init(batch.Name)
-			nextLogo("")
+			nextExam()
 		}
-		output.Print("Again? (y/N)-> ")
-		var bb bool
-		ioTrigger.Judge(func(b bool) {
-			output.Clear()
-			bb = b
-		})
-		if !bb {
+		output.Clear()
+		if output.Print("Again? (y/N)-> "); !ioTrigger.Judge() {
 			break
 		}
 	}

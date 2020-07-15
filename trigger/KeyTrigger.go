@@ -19,12 +19,13 @@ func (*KeyTrigger) Wait() {
 }
 
 // 判断是否错误
-func (*KeyTrigger) Judge(callback func(r bool)) {
+func (*KeyTrigger) Judge() (b bool) {
 	io.ReadAndCompare("y", func(string){
-		callback(true)
+		b = true
 	}, func(string){
-		callback(false)
+		b = false
 	})
+	return
 }
 
 func (*KeyTrigger) Init() {

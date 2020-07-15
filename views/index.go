@@ -7,48 +7,69 @@ import (
 	"strings"
 )
 
-var (
-	mainWindow *MainWindow
-	consoleTxt *walk.TextEdit
-)
+type MyMainWindow struct {
+	*walk.MainWindow
+}
 
 var (
-	yesOrNo chan bool
+	mw           *MyMainWindow
+	consoleTxt   *walk.TextEdit
+	communicator chan int
+)
+
+// 通讯协议
+const (
+	SelectYes = 1
+	SelectNo = 0
+	TitlePrefix =  "记忆小工具-"
 )
 
 func init(){
-	yesOrNo = make(chan bool)
-	mainWindow = &MainWindow{
-		Title:   "记忆小工具",
+	communicator = make(chan int)
+	mw = new(MyMainWindow)
+	(MainWindow{
+		Title:  TitlePrefix,
 		MinSize: Size{400, 300},
 		Layout:  VBox{},
+		AssignTo: &mw.MainWindow,
+		MenuItems: []MenuItem{
+			Menu{
+				Text: "Setting",
+				Items: []MenuItem{
+					Action{
+						Text: "Exit",
+						OnTriggered: func() { mw.Close() },
+					},
+				},
+			},
+		},
 		Children: []Widget{
-			TextEdit{AssignTo: &consoleTxt, ReadOnly:true},
+			TextEdit{AssignTo: &consoleTxt, ReadOnly:true, HScroll: true, VScroll: true, Font: Font{PointSize:12}},
 			HSplitter{
 				Children: []Widget{
 					PushButton{
 						MinSize: Size{100, 50},
 						Text: "Yes!",
 						OnClicked: func() {
-							yesOrNo <- true
+							communicator <- SelectYes
 						},
 					},
 					PushButton{
 						MinSize: Size{100, 50},
 						Text: "No!",
 						OnClicked: func() {
-							yesOrNo <- false
+							communicator <- SelectNo
 						},
 					},
 				},
 			},
 		},
-	}
+	}).Create()
 }
 
 func Wait(){
 	for {
-		if consoleTxt != nil {
+		if consoleTxt != nil && mw != nil {
 			return
 		}
 	}
@@ -58,8 +79,8 @@ func Clear(){
 	consoleTxt.SetText("")
 }
 
-func GetYesOrNo() <-chan bool {
-	return yesOrNo
+func GetYesOrNo() <-chan int {
+	return communicator
 }
 
 func SetText(str string) {
@@ -72,6 +93,14 @@ func SetText(str string) {
 	panic(errors.New("consoleTxt is nil"))
 }
 
+func SetTitle(str... string) {
+	if mw != nil {
+		mw.SetTitle(TitlePrefix + strings.Join(str, ""))
+		return
+	}
+	panic(errors.New("wm is nil"))
+}
+
 func Index() {
-	mainWindow.Run()
+	mw.Run()
 }

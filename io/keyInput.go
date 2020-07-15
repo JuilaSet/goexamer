@@ -28,7 +28,6 @@ func Wait() {
 	reader.ReadString('\n')
 	//text, _ := reader.ReadString('\n')
 }
-
 func ReadInput() (text string) {
 	text, err := reader.ReadString('\n')
 	if err != nil {
