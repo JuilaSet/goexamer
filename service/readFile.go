@@ -81,10 +81,8 @@ func ReadItem(line string) {
 		})(func(pair [2]string) {
 			if lastBatch == nil {
 				store.SaveQus(pair[0], pair[1])
-				store.SetScore(pair[0], 1) // 初始测试次数标记为1
 			} else {
 				lastBatch.SaveQus(pair[0], pair[1])
-				lastBatch.SetScore(pair[0], 1)
 			}
 			lastIndex = pair[0]
 		})

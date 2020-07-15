@@ -3,8 +3,13 @@ exit
 
 title: title!
 
-[aaa]
-#batch0: hahaha
-#batch1: fafafa
+[batchA-3]
+#batch0: 000
+#batch1: 111
+\111
+#batch2: 222222
+\fff
+\fff
 
-//[临界资源安全问题]
+[batchB-1]
+#kfc: hello

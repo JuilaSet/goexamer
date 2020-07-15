@@ -2,62 +2,99 @@ package controller
 
 import (
 	"goexamer/config"
-	"goexamer/io"
+	"goexamer/router"
 	"goexamer/service"
 	"goexamer/store"
 	"goexamer/trigger"
+	"goexamer/views"
 )
 
 var ioTrigger trigger.Trigger // 触发器
-var output io.OutPutter // 输出器
 
 func init(){
 	ioTrigger = config.IoTrigger()
-	output = config.OutPutter()
 }
 
 // 进行测试
 func Exam() {
-	// router
-	var nextExam, nextReview func()
-	nextExam = func(){
-		output.Clear()
-		service.Exam()
-		// 检测是否还有错题
-		for _, n := range service.GetBatch().GetAllScore() {
-			if n > 0 {
-				output.Clear()
-				if output.Print("Review? (y/N)-> "); ioTrigger.Judge() {
-					nextReview()
-				}
-				return
+	var pItemQus, pItemAns, pStart, pFinish *router.State
+	var pSelectBatch, pNo, pYes func()
+	var curState *router.State
+	ioTrigger.ReadInput(func(msg *trigger.Msg, exit *bool) {
+		pNo = func() {}
+
+		pYes = func() {
+			service.SelectYes()
+		}
+
+		pFinish = router.NewState(func() {
+			service.FinishMsg()
+		}, func(input interface{}) {
+			switch input.(int) {
+			case views.SelectYes:
+				curState = pStart
+			case views.SelectPost:
+				pSelectBatch()
+				curState = pItemQus
+			default:
+				*exit = true
 			}
+		})
+
+		pSelectBatch = func() {
+			service.Start(store.NewSelector(store.GetBatch(msg.Ctx)))
+			service.Title()
 		}
-	}
-	nextReview = func(){
-		output.Clear()
-		service.Review()
-		// 检测是否还有错题
-		for _, n := range service.GetBatch().GetAllScore() {
-			if n > 0 {
-				output.Clear()
-				output.Print("Continue? (y/N)-> ")
-				if ioTrigger.Judge() {
-					nextReview()
-				}
-				return
+
+		pStart = router.NewState(func() {
+			service.HelpMsg()
+		}, func(input interface{}) {
+			switch input.(int) {
+			case views.SelectPost:
+				pSelectBatch()
+				curState = pItemQus
+			default:
+				curState = pStart
 			}
+		})
+
+		pItemAns = router.NewState(func() {
+			service.ItemAns()
+		}, func(input interface{}) {
+			switch input.(int) {
+			case views.SelectYes:
+				pYes()
+				if service.IsEnd() {
+					curState = pFinish
+				} else {
+					curState = pItemQus
+				}
+			case views.SelectNo:
+				pNo()
+				curState = pItemQus
+			case views.SelectPost:
+				pSelectBatch()
+				curState = pItemQus
+			default:
+				curState = pItemAns
+			}
+		})
+
+		pItemQus = router.NewState(func() {
+			service.ItemQus()
+		}, func(input interface{}) {
+			switch input.(int) {
+			case views.SelectPost:
+				pSelectBatch()
+				curState = pItemQus
+			default:
+				curState = pItemAns
+			}
+		})
+		if curState == nil {
+			curState = pStart
 		}
-	}
-	// start
-	for {
-		for _, batch := range store.GetAllBatch() {
-			service.Init(batch.Name)
-			nextExam()
-		}
-		output.Clear()
-		if output.Print("Again? (y/N)-> "); !ioTrigger.Judge() {
-			break
-		}
-	}
+		curState.ChangeState(msg.Flag)
+		curState.Todo()
+	})
 }
