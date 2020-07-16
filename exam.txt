@@ -3,6 +3,10 @@ exit
 
 title: title!
 
+[调度系数测试]
+#A: 大大地
+#B: 保留, 保持, 维持, 记忆力
+#C: 集成, 整合
 
 [batch命令测试]
 \@link:A
@@ -15,7 +19,7 @@ title: title!
 
 [命令测试]
 #换行测试: line1
-\@qus:line2
+\@@qus:line2
 #img: 12
 \@img:timg.jpg:miao.jpg
 

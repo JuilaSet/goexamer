@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/pkg/errors"
+	"goexamer/params"
 	"goexamer/router"
 	"goexamer/service"
 	"goexamer/utils"
@@ -12,7 +13,7 @@ func ReadFile(){
 	var pStart, pNewBatch, pReadLineOfTitle, pReadLineOfBatch, pReadLineOfItem, pSetTitle, pReadItem *router.State
 	var curState *router.State
 
-	service.ReadFile(func(info *service.LineInfo) {
+	service.ReadFile(params.GetInputFileName(), func(info *service.LineInfo) {
 		pStart = router.NewState(func() {}, func(input interface{}) {
 			switch rune(input.(rune)) {
 			case utils.BatchMark:

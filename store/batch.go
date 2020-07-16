@@ -19,6 +19,10 @@ var (
 )
 
 func init() {
+	Init()
+}
+
+func Init() {
 	batchGroup = make(map[string]*Batch)
 	batchArray = nil
 	batchGroup[""] = CreateBatch("")
@@ -28,7 +32,7 @@ func init() {
 func BatchArray() []*Batch {
 	if batchArray == nil {
 		var nameArr []string
-		for name := range batchGroup {
+		for name := range GetAllBatch() {
 			nameArr = append(nameArr, name)
 		}
 		sort.Strings(nameArr)

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"goexamer/utils"
-	"io/ioutil"
 	"os"
 )
 
@@ -37,6 +36,6 @@ func EachLine(file *os.File) func(todoFunc) {
 	}
 }
 
-func Write(filename string, data string) {
-	ioutil.WriteFile(filename, []byte(data), 0664)
-}
+//func Write(filename string, data string) {
+//	ioutil.WriteFile(filename, []byte(data), 0664)
+//}

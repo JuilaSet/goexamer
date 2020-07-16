@@ -4,7 +4,6 @@ import (
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
 	"github.com/pkg/errors"
-	"goexamer/store"
 	"os"
 	"strings"
 )
@@ -55,7 +54,6 @@ func GetCommunicator() *Communicator {
 	return communicator
 }
 
-
 func init(){
 	communicator = NweCommunicator()
 	mw = new(MyMainWindow)
@@ -66,14 +64,25 @@ func init(){
 		AssignTo: &mw.MainWindow,
 		MenuItems: []MenuItem{
 			Menu{
-				Text: "Setting",
+				Text: "File",
 				Items: []MenuItem{
 					Action{
 						Text: "Batch Selector",
 						OnTriggered: func() {
-							FromBatch(store.GetAllBatch()).Run()
+							FromBatch().Run()
 						},
 					},
+					Action{
+						Text: "Exit",
+						OnTriggered: func() {
+							os.Exit(0)
+						},
+					},
+				},
+			},
+			Menu{
+				Text: "Setting",
+				Items: []MenuItem{
 					Action{
 						AssignTo: &aFontSlider,
 						Text: "Font Size Slider",
@@ -84,12 +93,6 @@ func init(){
 							} else {
 								aFontSlider.SetText("Font Size Slider")
 							}
-						},
-					},
-					Action{
-						Text: "Exit",
-						OnTriggered: func() {
-							os.Exit(0)
 						},
 					},
 				},

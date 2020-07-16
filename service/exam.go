@@ -80,9 +80,11 @@ func ItemQus() {
 	output.Clear()
 	BatchName()
 	selector.ExecuteBeforeFunc()
+	// 选择调度系数最大的先执行
+	selector.SetNext(selector.MinHotFactorItemName())
 	item, totalCount := selector.PopItem(), len(selector.Batch().GetAllQus())
 	output.Println("(" + strconv.Itoa(selector.FinishCount()) + "/" + strconv.Itoa(totalCount) + ")question^" +
-		strconv.Itoa(selector.ItemScore(item.Qus)) + ":", item.Qus)
+		selector.DispatchCoefficientString(item.Qus) + ":", item.Qus)
 	selector.ExecuteMidFunc()
 }
 
@@ -101,5 +103,11 @@ func ItemAns() {
 }
 
 func SelectYes() {
-	selector.Deduct(1)
+	if i := selector.CalcDispatchCoefficient(1, true); selector.IsFinish(i) {
+		selector.Deduct(1)
+	}
+}
+
+func SelectNo() {
+	selector.CalcDispatchCoefficient(0, false)
 }

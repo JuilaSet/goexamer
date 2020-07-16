@@ -3,7 +3,6 @@ package service
 import (
 	"errors"
 	"goexamer/io"
-	"goexamer/params"
 	"goexamer/store"
 	"goexamer/utils"
 	"os"
@@ -92,8 +91,8 @@ func ReadItem(line string) {
 	}
 }
 
-func ReadFile(controllerCallBack func(info *LineInfo)) string {
-	file, err := os.Open(params.GetInputFileName())
+func ReadFile(fileName string, controllerCallBack func(info *LineInfo)) string {
+	file, err := os.Open(fileName)
 	if err != nil {
 		panic(err)
 	}

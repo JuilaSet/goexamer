@@ -2,29 +2,41 @@ package service
 
 import (
 	"goexamer/store"
+	"math"
+	"strconv"
+)
+
+const (
+	C = 0.3 // 冷却系数
+	C0 = 0.5
 )
 
 type Selector struct {
-	score map[string]int		// 剩余需要进行的测试次数
-	arraySet []string			// 调度顺序, 根据原始数据每次随机生成
-	i int						// 当前位置只负责调度
-	curItem *Item				// 当前item, 可能会出现当前的item与s.i指向不一样的情况
-	batch *store.Batch
+	score            map[string]int     // 剩余需要进行的测试次数
+	arraySet         []string           // 调度顺序, 根据原始数据每次随机生成
+	i                int                // 当前位置只负责调度
+	curItem          *Item              // 当前item, 可能会出现当前的item与s.i指向不一样的情况
+	correctFrequency map[string]int     // item的出现次数
+	lastN            map[string]int     // item的上次出现次数
+	hotFactor        map[string]float64 // 熟悉因子
+	batch            *store.Batch
+	n                int						// 弹出item次数
 }
 
 func NewSelector(batch *store.Batch) *Selector {
-	score, arraySet := make(map[string]int), make([]string, 0)
-	for name := range batch.GetAllQus() {
-		score[name] = 1
-		arraySet = append(arraySet, name)
-	}
-	return &Selector{
-		score,
-		arraySet,
-		-1,
+	s := &Selector{
+		make(map[string]int),
+		make([]string, 0),
+		0,
 		nil,
+		make(map[string]int),
+		make(map[string]int),
+		make(map[string]float64),
 		batch,
+		0,
 	}
+	s.Init()
+	return s
 }
 
 // 置为初始状态
@@ -32,9 +44,13 @@ func (s *Selector) Init() {
 	s.arraySet = []string{}
 	for name := range s.batch.GetAllQus() {
 		s.score[name] = 1
+		s.correctFrequency[name] = 0
+		s.hotFactor[name] = 1.5
+		s.lastN[name] = 0
 		s.arraySet = append(s.arraySet, name)
 	}
 	s.i = 0
+	s.n = 0
 }
 
 // 当前完成进度
@@ -54,7 +70,7 @@ func (s *Selector) ItemScore(itemName string) int {
 
 // 取出当前item字符串
 func (s *Selector) CurQus() string {
-	return s.arraySet[s.i]
+	return s.curItem.Qus
 }
 
 // 取出当前item
@@ -131,11 +147,11 @@ func (s *Selector) NextItem() (*Item, int) {
 		i := s.next(s.i)
 		var qus string
 		for {
-			qus = s.arraySet[i]
-			if s.score[qus] > 0 {
-				break
-			}
-			i = s.next(i)
+		qus = s.arraySet[i]
+		if s.score[qus] > 0 {
+			break
+		}
+		i = s.next(i)
 		}
 		return NewItem(qus, s.batch.GetAllQus()[qus]), i
 	}
@@ -145,6 +161,62 @@ func (s *Selector) NextItem() (*Item, int) {
 func (s *Selector) PopItem() *Item {
 	s.curItem, s.i = s.NextItem()
 	return s.curItem
+}
+
+// 获取调度系数
+func (s *Selector) DispatchCoefficient(name string) float64 {
+	return s.hotFactor[name]
+}
+
+// 获取调度系数字符串
+func (s *Selector) DispatchCoefficientString(name string) string {
+	return strconv.FormatFloat(selector.DispatchCoefficient(name),'f',2,64)
+}
+
+// 找到调度系数最小的项名称, 每次选择hotFactor最小的弹出来
+func (s *Selector) MinHotFactorItemName() string {
+	focus, key := 100.0, ""
+	for k, v := range s.hotFactor {
+		if focus > v {
+			focus, key = v, k
+		}
+	}
+	return key
+}
+
+// 计算调度系数(q ∈(0, 4), 当q=4减去的是0)
+func (s *Selector) CalcDispatchCoefficient(q float64, correct bool) float64 {
+	name := s.curItem.Qus
+	s.n++
+	if correct {
+		s.correctFrequency[name]++
+		s.hotFactor[name] += q * float64(s.correctFrequency[name])
+	} else {
+		s.correctFrequency[name]--
+		if s.correctFrequency[name] < 0 {
+			s.correctFrequency[name] = 0
+		}
+		s.hotFactor[name] *= math.Exp(-C0 * float64(s.n - s.lastN[name]))
+	}
+	s.lastN[s.curItem.Qus] = s.n
+	// 其他项目
+	for qus := range s.hotFactor {
+		if qus != name {
+			s.hotFactor[qus] *= math.Exp(-C * float64(s.n - s.lastN[qus]))
+		}
+		if s.hotFactor[qus] < 0.01 {
+			s.hotFactor[qus] = 0.01
+		}
+	}
+	return s.hotFactor[name]
+}
+
+// 是否完成
+func (s *Selector) IsFinish(ef float64) bool {
+	if ef >= 2.0 {
+		return true
+	}
+	return false
 }
 
 // 获得batch对象

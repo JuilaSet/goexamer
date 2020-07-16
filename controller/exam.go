@@ -25,7 +25,9 @@ func Exam() {
 	service.Title()
 
 	ioTrigger.ReadInput(func(msg *trigger.Msg, exit *bool) {
-		pNo = func() {}
+		pNo = func() {
+			service.SelectNo()
+		}
 
 		pYes = func() {
 			service.SelectYes()

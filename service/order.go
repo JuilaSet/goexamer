@@ -65,6 +65,12 @@ func InitMidActionFunc() {
 			output.Println(v)
 		}
 	}
+	midActionFuncMap["showFactor"] = func(selector *Selector, params []string) {
+		value := params[0]
+		item := selector.CurItem()
+		value = strings.ReplaceAll(value, utils.CurQusPrefix, item.Qus)
+		output.Println(selector.DispatchCoefficientString(value))
+	}
 }
 
 func InitAfterActionFunc() {

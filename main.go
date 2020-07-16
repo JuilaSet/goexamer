@@ -8,18 +8,6 @@ import (
 	"runtime"
 )
 
-func Start() {
-	views.Wait()
-	controller.Init()
-	controller.ReadFile()
-	controller.Exam()
-	os.Exit(0)
-}
-
-func Schedule() {
-	runtime.Gosched()
-}
-
 func main(){
 	// 错误日志
 	defer func(){
@@ -29,7 +17,13 @@ func main(){
 		}
 	}()
 	// 启动状态机
-	go Start()
+	go func(){
+		views.Wait()
+		controller.Init()
+		controller.ReadFile()
+		controller.Exam()
+		os.Exit(0)
+	}()
 	// 启动视图进程
 	views.Index()
 }

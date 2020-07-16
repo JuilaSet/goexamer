@@ -4,7 +4,7 @@ import (
 	"goexamer/utils"
 	"strings"
 )
-type ActionFunc func(selector *Selector, param []string)
+type ActionFunc func(selector *Selector, params []string)
 
 type Action struct {
 	Name string
