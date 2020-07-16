@@ -3,33 +3,35 @@
 
 * 基于walk库的简单记忆工具
 * 可以根据用户脚本帮助用户记忆内容
-* 使用方法: 
+
+## 使用方法: 
 0. 用户编写一个小脚本, 包括所有要记忆的项和命令
 1. 使用 goexamer -i "脚本名称" 执行脚本
 2. 系统会每次随机抽取一项，显示问题, 之后用户选择是否记得
 3. 如果该项选择为"不记得"，会在之后的复习阶段重新出现以帮助用户巩固复习
 
-## 标题
+### 标题
 ```
 title: titlevalue
 \NextLine
-\@action
 ```
 
-## 批次(batch)
+### 批次(batch)
 ```
 [BatchName]
+\NextLine
+\@action
 item...
 ```
 
-## 项(item)
+### 项(item)
 ```
 #itemName: value
 \NextLine
 \@action
 ```
 
-## 动作命令(action)
+### 动作命令(action)
 * @deduct:itemName item的测试次数-1 
 * @mark:itemName item的测试次数+1 
 * @jmp:itemName 当前结束后强制跳转并执行指定的item 
