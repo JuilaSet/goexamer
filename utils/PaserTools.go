@@ -26,13 +26,17 @@ func GetPair(str string, check func(string)bool) func(func(strS [2]string)) {
 }
 
 // 解析 "@action:value" 字符串形式
-func GetActionStr(line string) (action string, value string) {
+func GetActionStr(line string) (action string, params []string) {
 	if strings.HasPrefix(line, "@") {
-		params := strings.Split(strings.Split(line, "@")[1], ":")
-		if len(params) != 2 {
-			return params[0], ""
+		actionLine := strings.Split(strings.Split(line, "@")[1], ":")
+		if len(actionLine) < 2 {
+			return actionLine[0], nil
 		}
-		return params[0], strings.TrimSpace(params[1])
+		action, params = actionLine[0], actionLine[1:]
+		for k := range params {
+			params[k] = strings.TrimSpace(params[k])
+		}
+		return
 	}
 	panic(errors.New("format error: " + line))
 }

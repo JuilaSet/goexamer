@@ -5,6 +5,7 @@ import (
 	. "github.com/lxn/walk/declarative"
 	"github.com/pkg/errors"
 	"goexamer/store"
+	"os"
 	"strings"
 )
 
@@ -87,7 +88,9 @@ func init(){
 					},
 					Action{
 						Text: "Exit",
-						OnTriggered: func() { mw.Close() },
+						OnTriggered: func() {
+							os.Exit(0)
+						},
 					},
 				},
 			},

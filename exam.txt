@@ -3,19 +3,25 @@ exit
 
 title: title!
 
-[batchA-3]
-#batch0: 000
-#batch1: 111
-\111
-#batch2: 222222
-\fff
-\fff
+[命令测试]
+#换行测试: line1
+\@qus:line2
+#img: 12
+\@img:timg.jpg:miao.jpg
 
-[batchB-1]
-#kfc: hello
+[跳转测试]
+#强制跳转测试:
+\@jmp:~
+#跳转自己测试: self
+\@link:~
 
-[batchB-2]
-#kfc2: hello2
-
-[]
-#default: a
+[分值测试]
+#set测试:
+\@set:10
+#set其他项目:
+\@set:其他项目:100
+#其他项目:
+#自加测试:
+\@mark:~
+#减少测试:
+\@deduct:~

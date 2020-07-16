@@ -20,23 +20,5 @@ func (*GUITrigger) ReadInput(actionCallBack func(msg *Msg, exit *bool)) {
 	}
 }
 
-// 判断是否错误
-func (*GUITrigger) Wait() {
-	views.GetCommunicator().Receive()
-}
-
-// 判断是否错误
-func (*GUITrigger) Judge() (b bool) {
-	views.SetText("\n")
-	flag, _ := views.GetCommunicator().Receive()
-	switch flag {
-	case views.SelectYes:
-		b = true
-	case views.SelectNo:
-		b = false
-	}
-	return
-}
-
 func (*GUITrigger) Init() {}
 

@@ -4,14 +4,20 @@ import (
 	"goexamer/config"
 	"goexamer/io"
 	"goexamer/store"
+	"goexamer/views"
 	"strconv"
 )
 
 var output io.OutPutter // 输出器
-var selector *store.Selector // 调度器
+var selector *Selector // 调度器
 
 func init() {
 	output = config.OutPutter()
+}
+
+// 显示图片
+func ShowImageFunc(rootDirPath, imageName string, title string) func() {
+	return views.ShowImage(views.FromImage(rootDirPath, imageName), title)
 }
 
 func FinishMsg() {
@@ -25,7 +31,7 @@ func HelpMsg() {
 	output.Println(" Please select a batch")
 }
 
-func Start(s *store.Selector) {
+func Start(s *Selector) {
 	selector = s
 	selector.Init()
 	output.Clear()
@@ -61,10 +67,11 @@ func IsEnd() bool {
 func ItemQus() {
 	output.Clear()
 	BatchName()
-	item := selector.PopItem()
-	totalCount := len(selector.Batch().GetAllQus())
+	selector.ExecuteBeforeFunc()
+	item, totalCount := selector.PopItem(), len(selector.Batch().GetAllQus())
 	output.Println("(" + strconv.Itoa(selector.FinishCount()) + "/" + strconv.Itoa(totalCount) + ")question^" +
 		strconv.Itoa(selector.ItemScore(item.Qus)) + ":", item.Qus)
+	selector.ExecuteMidFunc()
 }
 
 func ItemAns() {
@@ -76,6 +83,7 @@ func ItemAns() {
 		}
 		return
 	}()
+	selector.ExecuteAfterFunc()
 	output.Println(ansStr)
 	output.Print("(y/N)-> ")
 }

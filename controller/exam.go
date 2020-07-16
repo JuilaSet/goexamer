@@ -32,7 +32,7 @@ func Exam() {
 		}
 
 		pSelectBatch = func() {
-			service.Start(store.NewSelector(store.GetBatch(msg.Ctx)))
+			service.Start(service.NewSelector(store.GetBatch(msg.Ctx)))
 		}
 
 		pFinish = router.NewState(func() {

@@ -5,6 +5,7 @@ import (
 )
 
 var title []string			// 多行标题
+
 type Batch struct {
 	Name  string
 	store map[string][]string	// 测试项目, 保存每一行
