@@ -2,6 +2,7 @@ package store
 
 import (
 	"github.com/pkg/errors"
+	"sort"
 )
 
 var title []string			// 多行标题
@@ -14,11 +15,28 @@ type Batch struct {
 
 var (
 	batchGroup map[string]*Batch
+	batchArray []*Batch
 )
 
 func init() {
 	batchGroup = make(map[string]*Batch)
+	batchArray = nil
 	batchGroup[""] = CreateBatch("")
+}
+
+// 变为数组
+func BatchArray() []*Batch {
+	if batchArray == nil {
+		var nameArr []string
+		for name := range batchGroup {
+			nameArr = append(nameArr, name)
+		}
+		sort.Strings(nameArr)
+		for _, name := range nameArr {
+			batchArray = append(batchArray, batchGroup[name])
+		}
+	}
+	return batchArray
 }
 
 // 创建已经存在name的将会获得原来就有的
@@ -85,6 +103,10 @@ func (b *Batch) AppendLine(line string) {
 
 func (b *Batch) Lines() []string {
 	return b.lines
+}
+
+func (b *Batch) IsEmpty() bool {
+	return len(b.store) == 0
 }
 
 func (b *Batch) ToString() (str string) {

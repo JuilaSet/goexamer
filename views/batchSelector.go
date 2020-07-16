@@ -18,19 +18,21 @@ type batchSelectorMainWindow struct {
 func FromBatch(batchGroup map[string]*store.Batch) (mainWindow MainWindow) {
 	var ws []Widget
 	var bmw = new(batchSelectorMainWindow)
-	for _, batch := range batchGroup {
+	for _, batch := range store.BatchArray() {
 		name, text := batch.Name, batch.Name
 		if text == "" {
 			text = "<default batch>"
 		}
-		ws = append(ws, PushButton{
-			MinSize: Size{Width: 100, Height: 50},
-			Text: text,
-			OnClicked: func() {
-				communicator.Send(SelectPost, name)
-				bmw.Close()
-			},
-		})
+		if !batch.IsEmpty() {
+			ws = append(ws, PushButton{
+				MinSize: Size{Width: 100, Height: 50},
+				Text: text,
+				OnClicked: func() {
+					communicator.Send(SelectPost, name)
+					bmw.Close()
+				},
+			})
+		}
 	}
 	mainWindow = MainWindow{
 		AssignTo: &bmw.MainWindow,
