@@ -10,6 +10,7 @@ import (
 
 var output io.OutPutter // 输出器
 var selector *Selector // 调度器
+var batchMsg string
 
 func init() {
 	output = config.OutPutter()
@@ -35,6 +36,7 @@ func Start(s *Selector) {
 	selector = s
 	selector.Init()
 	output.Clear()
+	Batch()
 }
 
 func Restart() {
@@ -43,12 +45,22 @@ func Restart() {
 }
 
 func BatchName() {
+	output.Println(batchMsg)
+}
+
+func Batch() {
 	batch := selector.Batch()
-	if batch.Name != "" {
-		output.Println("======================")
-		output.Println(" chapter: ", batch.Name)
-		output.Println("======================", "\n")
+	item := NewItem(batch.Name, batch.Lines())
+	selector.SetCurItemDangerous(item)
+	batchMsg = "======================\n" +
+	" chapter: " + item.Qus + "\n"
+	for _, line := range item.Ans {
+		batchMsg += " " + line + "\n"
 	}
+	batchMsg += "======================" + "\n"
+	selector.ExecuteBeforeFunc()
+	selector.ExecuteMidFunc()
+	selector.ExecuteAfterFunc()
 }
 
 func Title() {

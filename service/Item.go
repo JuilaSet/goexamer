@@ -54,7 +54,7 @@ func NewItem(qus string, rawAns []string) (item *Item) {
 		if strings.HasPrefix(line, utils.ActionPrefix) {
 			setFunc(item, line)
 		} else {
-			item.Ans  = append(item.Ans , line)
+			item.Ans = append(item.Ans, line)
 		}
 	}
 	return

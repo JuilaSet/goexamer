@@ -8,6 +8,7 @@ var title []string			// 多行标题
 
 type Batch struct {
 	Name  string
+	lines []string				// 每一行
 	store map[string][]string	// 测试项目, 保存每一行
 }
 
@@ -27,6 +28,7 @@ func CreateBatch(name string) *Batch {
 	}
 	return &Batch{
 		name,
+		make([]string, 0),
 		make(map[string][]string),
 	}
 }
@@ -75,6 +77,14 @@ func GetAll() map[string][]string {
 
 func (b *Batch) GetQus(qus string) []string {
 	return b.store[qus]
+}
+
+func (b *Batch) AppendLine(line string) {
+	b.lines = append(b.lines, line)
+}
+
+func (b *Batch) Lines() []string {
+	return b.lines
 }
 
 func (b *Batch) ToString() (str string) {

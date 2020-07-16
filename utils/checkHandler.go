@@ -7,6 +7,17 @@ import (
 )
 
 const (
+	//regExp = `(^\s$)|(^(Tn*)?((Bn*)?(In*)+)*$)`
+	FormatRule = `(^\s$)|(^(` +
+		string(TitleMark) +
+		string(LineMark) + `*)?((` +
+		string(BatchMark) +
+		string(LineMark) + `*)?(` +
+		string(ItemMark) +
+		string(LineMark) + `*)+)*$)`
+)
+
+const (
 	Batch = `^(\[.*?\])`
 	Item = `^(#.+:)`
 	Line = `^(\\.+)`

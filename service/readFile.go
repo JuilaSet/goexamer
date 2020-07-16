@@ -12,25 +12,21 @@ import (
 	"strings"
 )
 
-const (
-	//regExp = `(^\s$)|(^(Tn*)?(B?(In*)+)*$)`
-	regExp = `(^\s$)|(^(` +
-		string(utils.TitleMark) +
-		string(utils.LineMark) + `*)?(` +
-		string(utils.BatchMark) + `?(` +
-		string(utils.ItemMark) +
-		string(utils.LineMark) + `*)+)*$)`
-)
-
 var (
 	rule *regexp.Regexp
 	lastIndex string // 上一次读取的index
 	lastBatch *store.Batch // 上一次的batch
 )
 
+type LineInfo struct {
+	Line string
+	Mark rune
+	N    int
+}
+
 func init() {
 	var err error
-	rule, err = regexp.Compile(regExp)
+	rule, err = regexp.Compile(utils.FormatRule)
 	if err != nil {
 		panic(err)
 	}
@@ -70,6 +66,13 @@ func NewBatch(line string) {
 	store.SaveBatch(lastBatch)
 }
 
+func ReadBatchLine(line string) {
+	if !strings.HasPrefix(line, "\\") || lastBatch == nil  {
+		panic(errors.New("unknown error " + line))
+	}
+	lastBatch.AppendLine(line[1:])
+}
+
 func ReadItem(line string) {
 	// 每一行可以看做为一个pair
 	if line != "" {
@@ -87,12 +90,6 @@ func ReadItem(line string) {
 			lastIndex = pair[0]
 		})
 	}
-}
-
-type LineInfo struct {
-	Line string
-	Mark rune
-	N    int
 }
 
 func ReadFile(controllerCallBack func(info *LineInfo)) string {

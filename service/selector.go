@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/pkg/errors"
 	"goexamer/store"
 )
 
@@ -61,16 +60,14 @@ func (s *Selector) CurQus() string {
 // 取出当前item
 func (s *Selector) CurItem() *Item {
 	if s.curItem == nil {
-		panic(errors.New("CurItem is nil"))
+		return NilItem
 	}
 	return s.curItem
 }
 
-// 改变当前执行对象
-func (s *Selector) SetCurItem(itemName string) {
-	if _, ok := s.score[itemName]; ok {
-		NewItem(itemName, s.batch.GetAllQus()[itemName])
-	}
+// 直接设置当且执行对象的指针
+func (s *Selector) SetCurItemDangerous(item *Item) {
+	s.curItem = item
 }
 
 func (s *Selector) IsEmpty() bool {

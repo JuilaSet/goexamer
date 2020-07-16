@@ -3,6 +3,15 @@ exit
 
 title: title!
 
+[batch命令测试]
+\@link:A
+\not action A
+\not action B
+#A:aaa
+\aaaa
+#B:bbb
+#C:cccc
+
 [命令测试]
 #换行测试: line1
 \@qus:line2

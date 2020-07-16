@@ -34,9 +34,9 @@ item...
 * @mark:itemName item的测试次数+1 
 * @jmp:itemName 当前结束后强制跳转并执行指定的item 
 * @link:itemName 当前结束后进入指定的item, 如果该item已经执行过, 就不执行 
-* @set:count 设置当前item的测试次数为大于0的数 
-* @showImg:imageName 显示当前img文件夹下的一张图片, 在交互之后进行 
+* @set:count, @set:itemName:count 设置item的测试次数为大于0的数
+* @showImg:imageName 显示当前img文件夹下的一张图片, 在交互之后进行
 * @execute:itemName 改变当前action的执行对象为指定对象, 只针对在交互之后执行的action有效 
-* @img:imageName 显示当前img文件夹下的一张图片, 在交互之前进行 
-* @help[:actionName] 显示帮助 
+* @img:imageName 显示当前img文件夹下的一张图片, 在交互之前进行
+* @help[:actionName] 显示帮助
 

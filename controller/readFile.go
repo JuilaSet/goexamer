@@ -9,7 +9,7 @@ import (
 )
 
 func ReadFile(){
-	var pStart, pNewBatch, pReadLineOfTitle, pReadLineOfItem, pSetTitle, pReadItem *router.State
+	var pStart, pNewBatch, pReadLineOfTitle, pReadLineOfBatch, pReadLineOfItem, pSetTitle, pReadItem *router.State
 	var curState *router.State
 
 	service.ReadFile(func(info *service.LineInfo) {
@@ -81,14 +81,28 @@ func ReadFile(){
 				panic(errors.New("line[" + strconv.Itoa(info.N) + "] Need batch, item or 'next line' here"))
 			}
 		})
+		pReadLineOfBatch = router.NewState(func() {
+			service.ReadBatchLine(info.Line)
+		}, func(input interface{}) {
+			switch info.Mark {
+			case utils.ItemMark:
+				curState = pReadItem
+			case utils.LineMark:
+				curState = pReadLineOfBatch
+			default:
+				panic(errors.New("line[" + strconv.Itoa(info.N) + "] Need item or 'next line' here"))
+			}
+		})
 		pNewBatch = router.NewState(func() {
 			service.NewBatch(info.Line)
 		}, func(input interface{}) {
 			switch info.Mark {
 			case utils.ItemMark:
 				curState = pReadItem
+			case utils.LineMark:
+				curState = pReadLineOfBatch
 			default:
-				panic(errors.New("line[" + strconv.Itoa(info.N) + "] Need item here"))
+				panic(errors.New("line[" + strconv.Itoa(info.N) + "] Need item or 'next line' here"))
 			}
 		})
 		if curState == nil {
