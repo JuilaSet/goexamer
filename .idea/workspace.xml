@@ -2,17 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb031967-f6a2-49b9-8494-c4225bf81e36" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/views/fileSelector.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/exam.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/exam.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/readFile.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/readFile.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/exam.txt" beforeDir="false" afterPath="$PROJECT_DIR$/exam.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/goexam.exe" beforeDir="false" afterPath="$PROJECT_DIR$/goexam.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/io/fileIO.go" beforeDir="false" afterPath="$PROJECT_DIR$/io/fileIO.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/Item.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/Item.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/params/inputFileInfo.go" beforeDir="false" afterPath="$PROJECT_DIR$/params/inputFileInfo.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/exam.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/exam.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/order.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/order.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/readFile.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/readFile.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/selector.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/selector.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/store/batch.go" beforeDir="false" afterPath="$PROJECT_DIR$/store/batch.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/batchSelector.go" beforeDir="false" afterPath="$PROJECT_DIR$/views/batchSelector.go" afterDir="false" />
@@ -28,10 +27,10 @@
     <session id="1465135517">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="61" />
+          <entry key="project.closed" value="65" />
           <entry key="project.open.time.0" value="6" />
-          <entry key="project.open.time.1" value="1" />
-          <entry key="project.open.time.10" value="3" />
+          <entry key="project.open.time.1" value="2" />
+          <entry key="project.open.time.10" value="4" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.13" value="1" />
@@ -39,42 +38,43 @@
           <entry key="project.open.time.20" value="1" />
           <entry key="project.open.time.21" value="1" />
           <entry key="project.open.time.4" value="7" />
-          <entry key="project.open.time.5" value="10" />
-          <entry key="project.open.time.6" value="17" />
+          <entry key="project.open.time.5" value="11" />
+          <entry key="project.open.time.6" value="18" />
           <entry key="project.open.time.7" value="7" />
           <entry key="project.open.time.8" value="4" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="62" />
+          <entry key="project.opened" value="66" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="39033" />
+          <entry key="go" value="40792" />
           <entry key="md" value="19" />
-          <entry key="txt" value="1334" />
+          <entry key="txt" value="1376" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="39033" />
-          <entry key="PLAIN_TEXT" value="1353" />
+          <entry key="Go" value="40792" />
+          <entry key="PLAIN_TEXT" value="1395" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="copy" value="1" />
-          <entry key="go" value="659" />
+          <entry key="gitattributes" value="1" />
+          <entry key="go" value="727" />
           <entry key="jpg" value="3" />
           <entry key="manifest" value="3" />
           <entry key="md" value="1" />
-          <entry key="txt" value="31" />
+          <entry key="txt" value="32" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Go" value="659" />
+          <entry key="Go" value="727" />
           <entry key="Image" value="3" />
-          <entry key="PLAIN_TEXT" value="36" />
+          <entry key="PLAIN_TEXT" value="38" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.go.postfix.template.usages.trigger">
@@ -88,46 +88,40 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/service/exam.go">
+        <entry file="file://$PROJECT_DIR$/controller/readFile.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="83" column="53" selection-start-line="83" selection-start-column="53" selection-end-line="83" selection-end-column="53" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/service/selector.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="176" column="50" selection-start-line="176" selection-start-column="50" selection-end-line="176" selection-end-column="50" />
+            <state relative-caret-position="216">
+              <caret line="126" selection-start-line="126" selection-end-line="126" />
               <folding>
-                <element signature="e#1126#1201#0" />
-                <element signature="e#1263#1292#0" />
-                <element signature="e#1344#1369#0" />
-                <element signature="e#1418#1482#0" />
-                <element signature="e#1552#1573#0" />
-                <element signature="e#1609#1650#0" />
-                <element signature="e#1696#1761#0" />
-                <element signature="e#2115#2196#0" />
-                <element signature="e#2432#2722#0" />
-                <element signature="e#3986#4005#0" />
-                <element signature="e#4076#4202#0" />
-                <element signature="e#4254#4289#0" />
-                <element signature="e#4360#4427#0" />
-                <element signature="e#4476#4582#0" />
-                <element signature="e#4619#4701#0" />
-                <element signature="e#4740#4824#0" />
+                <element signature="e#543#3303#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/exam.txt">
+        <entry file="file://$PROJECT_DIR$/controller/exam.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="9" selection-start-line="9" selection-end-line="9" />
+            <state relative-caret-position="159">
+              <caret line="41" column="32" selection-start-line="41" selection-start-column="32" selection-end-line="41" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/service/exam.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="182">
+              <caret line="36" column="44" lean-forward="true" selection-start-line="36" selection-start-column="44" selection-end-line="36" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="171">
+              <caret line="27" column="28" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -143,13 +137,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Trigger</find>
-      <find>input interface{}</find>
-      <find>finishSet</find>
-      <find>ToString</find>
-      <find>actions</find>
-      <find>curQus</find>
-      <find>getMidAndAfter</find>
       <find>Title</find>
       <find>Curren Count</find>
       <find>pYes</find>
@@ -163,7 +150,6 @@
       <find>showImageFunc</find>
       <find>value string)</find>
       <find>regExp</find>
-      <find>Batch</find>
       <find>pReadLineOfBatch</find>
       <find>BatchName</find>
       <find>s.i</find>
@@ -173,6 +159,14 @@
       <find>frequency</find>
       <find>MinHotFactorItemName</find>
       <find>qus</find>
+      <find>2.0</find>
+      <find>Batch</find>
+      <find>Batch()</find>
+      <find>store</find>
+      <find>batchSelectorMainWindow</find>
+      <find>FooModel</find>
+      <find>Warning</find>
+      <find>Restart</find>
     </findStrings>
     <replaceStrings>
       <replace>b</replace>
@@ -200,6 +194,8 @@
       <replace>hardFactor</replace>
       <replace>1.41</replace>
       <replace>name</replace>
+      <replace>fileSelectorMainWindow</replace>
+      <replace>FileInfoModel</replace>
     </replaceStrings>
   </component>
   <component name="GOROOT" path="C:\Go" />
@@ -209,10 +205,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/io/PaserTools.go" />
         <option value="$PROJECT_DIR$/io/fileOutput.go" />
         <option value="$PROJECT_DIR$/params.go" />
-        <option value="$PROJECT_DIR$/params/inputFileInfo.go" />
         <option value="$PROJECT_DIR$/test.manifest" />
         <option value="$PROJECT_DIR$/utils/TorF.go" />
         <option value="$PROJECT_DIR$/io/TorF.go" />
@@ -246,20 +240,22 @@
         <option value="$PROJECT_DIR$/utils/PaserTools.go" />
         <option value="$PROJECT_DIR$/deprecated.go" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/utils/checkHandler.go" />
         <option value="$PROJECT_DIR$/views/batchSelector.go" />
-        <option value="$PROJECT_DIR$/views/index.go" />
-        <option value="$PROJECT_DIR$/main.go" />
-        <option value="$PROJECT_DIR$/store/batch.go" />
         <option value="$PROJECT_DIR$/io/fileIO.go" />
-        <option value="$PROJECT_DIR$/service/readFile.go" />
-        <option value="$PROJECT_DIR$/controller/readFile.go" />
-        <option value="$PROJECT_DIR$/controller/exam.go" />
         <option value="$PROJECT_DIR$/service/Item.go" />
         <option value="$PROJECT_DIR$/service/order.go" />
         <option value="$PROJECT_DIR$/exam.txt" />
-        <option value="$PROJECT_DIR$/service/exam.go" />
+        <option value="$PROJECT_DIR$/store/batch.go" />
+        <option value="$PROJECT_DIR$/views/index.go" />
+        <option value="$PROJECT_DIR$/utils/checkHandler.go" />
+        <option value="$PROJECT_DIR$/service/readFile.go" />
+        <option value="$PROJECT_DIR$/views/fileSelector.go" />
         <option value="$PROJECT_DIR$/service/selector.go" />
+        <option value="$PROJECT_DIR$/service/exam.go" />
+        <option value="$PROJECT_DIR$/controller/readFile.go" />
+        <option value="$PROJECT_DIR$/params/inputFileInfo.go" />
+        <option value="$PROJECT_DIR$/controller/exam.go" />
+        <option value="$PROJECT_DIR$/main.go" />
       </list>
     </option>
   </component>
@@ -303,7 +299,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -315,6 +310,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -328,15 +324,15 @@
     <property name="settings.editor.selected.configurable" value="copyright" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\D_box\wkspc\go\src\goexamer\views" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\D_box\wkspc\go\src\goexamer" />
       <recent name="D:\D_box\wkspc\go\src\goexamer\service" />
       <recent name="D:\D_box\wkspc\go\src\goexamer\store" />
       <recent name="D:\D_box\wkspc\go\src\goexamer\trigger" />
       <recent name="D:\D_box\wkspc\go\src\goexamer\img" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\D_box\wkspc\go\src\goexamer\views" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -367,6 +363,7 @@
       <module name="goexamer" />
       <working_directory value="$PROJECT_DIR$/" />
       <go_parameters value="-i -ldflags=&quot;-H windowsgui&quot;" />
+      <parameters value="-i exam.txt" />
       <kind value="DIRECTORY" />
       <filePath value="$PROJECT_DIR$/" />
       <package value="goexamer" />
@@ -392,12 +389,12 @@
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24656427" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26273242" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32740214" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4995958" weight="0.21352313" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4987874" weight="0.32384342" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.16370107" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -405,7 +402,7 @@
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.49466193" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5004042" side_tool="true" weight="0.41103202" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5012126" side_tool="true" weight="0.16192171" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -419,86 +416,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/declarative/textedit.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="21" column="25" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/textedit.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-320">
-          <caret line="29" column="1" lean-forward="true" selection-start-line="29" selection-start-column="1" selection-end-line="29" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/slider.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="89" column="18" selection-start-line="89" selection-start-column="18" selection-end-line="89" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/property.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="18" column="5" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/window.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="1095" column="37" selection-start-line="1095" selection-start-column="37" selection-end-line="1095" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/img/miao.jpg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/form.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="283" column="20" selection-start-line="283" selection-start-column="20" selection-end-line="283" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/menu.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="83" column="60" selection-start-line="83" selection-start-column="60" selection-end-line="83" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/declarative/action.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="91" column="5" selection-start-line="91" selection-start-column="5" selection-end-line="91" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/actionlist.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="45" column="21" selection-start-line="45" selection-start-column="21" selection-end-line="45" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/font.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="169" column="23" selection-start-line="169" selection-start-column="15" selection-end-line="169" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/action.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1709">
-          <caret line="43" column="4" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/declarative/builder.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2">
@@ -570,13 +487,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/imageViewer.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-76">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trigger/KeyTrigger.go" />
     <entry file="file://$PROJECT_DIR$/trigger/GUITrigger.go">
       <provider selected="true" editor-type-id="text-editor">
@@ -589,13 +499,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
           <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/ioConfig.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="21" column="39" selection-start-line="21" selection-start-column="39" selection-end-line="21" selection-end-column="39" />
         </state>
       </provider>
     </entry>
@@ -613,20 +516,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/PaserTools.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="703">
-          <caret line="40" column="46" lean-forward="true" selection-start-line="40" selection-start-column="46" selection-end-line="40" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/checkHandler.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Go/src/strings/strings.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="116">
@@ -641,20 +530,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/batchSelector.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="20" column="37" selection-start-line="20" selection-start-column="37" selection-end-line="20" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controller/setInput.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/io/keyInput.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19">
@@ -662,52 +537,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/io/output.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-499">
-          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/service/readFile.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="589">
-          <caret line="94" column="33" selection-start-line="94" selection-start-column="33" selection-end-line="94" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1273">
-          <caret line="73" column="22" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="22" column="24" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/io/fileIO.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19">
           <caret line="7" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/store/batch.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="24" column="13" lean-forward="true" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controller/readFile.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="41" column="10" lean-forward="true" selection-start-line="41" selection-start-column="10" selection-end-line="41" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -725,59 +558,213 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controller/exam.go">
+    <entry file="file://$PROJECT_DIR$/views/imageViewer.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="89" column="29" selection-start-line="89" selection-start-column="29" selection-end-line="89" selection-end-column="29" />
+        <state relative-caret-position="19">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/service/order.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-304">
-          <caret line="65" column="9" selection-start-line="65" selection-start-column="9" selection-end-line="65" selection-end-column="9" />
+        <state relative-caret-position="494">
+          <caret line="60" lean-forward="true" selection-start-line="60" selection-end-line="60" />
           <folding>
             <element signature="e#569#1031#0" />
+            <element signature="e#1106#1262#0" />
+            <element signature="e#1335#1492#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/service/exam.go">
+    <entry file="file://$PROJECT_DIR$/io/output.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="83" column="53" selection-start-line="83" selection-start-column="53" selection-end-line="83" selection-end-column="53" />
+        <state relative-caret-position="-627">
+          <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/window.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="116">
+          <caret line="1188" column="22" selection-start-line="1188" selection-start-column="22" selection-end-line="1188" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/form.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="320" column="20" selection-start-line="320" selection-start-column="20" selection-end-line="320" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/store/batch.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/exam.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        <state relative-caret-position="95">
+          <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitattributes">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://C:/Go/src/os/getwd.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="28" column="5" lean-forward="true" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Go/src/path/filepath/path.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="397" column="39" lean-forward="true" selection-start-line="397" selection-start-column="39" selection-end-line="397" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Go/src/io/ioutil/ioutil.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="95" column="43" selection-start-line="95" selection-start-column="30" selection-end-line="95" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/declarative/layouts.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="114" column="8" selection-start-line="114" selection-start-column="4" selection-end-line="114" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/declarative/tableview.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-631">
+          <caret line="17" column="28" lean-forward="true" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Go/src/os/types.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="22" column="16" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../github.com/lxn/walk/models.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-601">
+          <caret line="160" column="5" selection-start-line="160" selection-start-column="5" selection-end-line="160" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/batchSelector.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/PaserTools.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="702">
+          <caret line="40" column="46" lean-forward="true" selection-start-line="40" selection-start-column="46" selection-end-line="40" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/checkHandler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="755">
+          <caret line="65" column="22" selection-start-line="65" selection-start-column="16" selection-end-line="65" selection-end-column="22" />
+          <folding>
+            <element signature="e#15#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/ioConfig.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="20" column="50" lean-forward="true" selection-start-line="20" selection-start-column="50" selection-end-line="20" selection-end-column="50" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/service/selector.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="176" column="50" selection-start-line="176" selection-start-column="50" selection-end-line="176" selection-end-column="50" />
+        <state relative-caret-position="244">
+          <caret line="51" column="11" lean-forward="true" selection-start-line="51" selection-start-column="11" selection-end-line="51" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/setInput.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/service/readFile.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="25" column="16" selection-start-line="25" selection-start-column="16" selection-end-line="25" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/fileSelector.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="512">
+          <caret line="90" selection-start-line="90" selection-end-line="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/params/inputFileInfo.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="20" column="14" lean-forward="true" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/readFile.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="126" selection-start-line="126" selection-end-line="126" />
           <folding>
-            <element signature="e#1126#1201#0" />
-            <element signature="e#1263#1292#0" />
-            <element signature="e#1344#1369#0" />
-            <element signature="e#1418#1482#0" />
-            <element signature="e#1552#1573#0" />
-            <element signature="e#1609#1650#0" />
-            <element signature="e#1696#1761#0" />
-            <element signature="e#2115#2196#0" />
-            <element signature="e#2432#2722#0" />
-            <element signature="e#3986#4005#0" />
-            <element signature="e#4076#4202#0" />
-            <element signature="e#4254#4289#0" />
-            <element signature="e#4360#4427#0" />
-            <element signature="e#4476#4582#0" />
-            <element signature="e#4619#4701#0" />
-            <element signature="e#4740#4824#0" />
+            <element signature="e#543#3303#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="27" column="28" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/exam.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="41" column="32" selection-start-line="41" selection-start-column="32" selection-end-line="41" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/service/exam.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="36" column="44" lean-forward="true" selection-start-line="36" selection-start-column="44" selection-end-line="36" selection-end-column="44" />
         </state>
       </provider>
     </entry>

@@ -27,19 +27,23 @@ func FinishMsg() {
 	output.Println("Continue? (y/N)->")
 }
 
-func HelpMsg() {
+func HelpFileMsg() {
+	output.Clear()
+	output.Println(" Please select a file")
+}
+
+func HelpBatchMsg() {
 	output.Clear()
 	output.Println(" Please select a batch")
 }
 
 func Start(s *Selector) {
 	selector = s
-	selector.Init()
-	output.Clear()
+	Init()
 	Batch()
 }
 
-func Restart() {
+func Init() {
 	selector.Init()
 	output.Clear()
 }
@@ -79,9 +83,9 @@ func IsEnd() bool {
 func ItemQus() {
 	output.Clear()
 	BatchName()
-	selector.ExecuteBeforeFunc()
 	// 选择调度系数最大的先执行
 	selector.SetNext(selector.MinHotFactorItemName())
+	selector.ExecuteBeforeFunc()
 	item, totalCount := selector.PopItem(), len(selector.Batch().GetAllQus())
 	output.Println("(" + strconv.Itoa(selector.FinishCount()) + "/" + strconv.Itoa(totalCount) + ")question^" +
 		selector.DispatchCoefficientString(item.Qus) + ":", item.Qus)

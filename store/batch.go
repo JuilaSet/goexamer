@@ -18,13 +18,10 @@ var (
 	batchArray []*Batch
 )
 
-func init() {
-	Init()
-}
-
 func Init() {
 	batchGroup = make(map[string]*Batch)
 	batchArray = nil
+	title = make([]string, 0)
 	batchGroup[""] = CreateBatch("")
 }
 

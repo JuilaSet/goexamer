@@ -65,27 +65,9 @@ func InitMidActionFunc() {
 			output.Println(v)
 		}
 	}
-	midActionFuncMap["showFactor"] = func(selector *Selector, params []string) {
-		value := params[0]
-		item := selector.CurItem()
-		value = strings.ReplaceAll(value, utils.CurQusPrefix, item.Qus)
-		output.Println(selector.DispatchCoefficientString(value))
-	}
 }
 
 func InitAfterActionFunc() {
-	// 设置下一项, 如果下一项可以执行就在下次执行
-	afterActionFuncMap["link"] = func(selector *Selector, params []string) {
-		value := params[0]
-		item := selector.CurItem()
-		value = strings.ReplaceAll(value, utils.CurQusPrefix, item.Qus)
-		selector.SetNext(value)
-	}
-	afterActionFuncMap["jmp"] = func(selector *Selector, params []string){
-		value := params[0]
-		value = strings.ReplaceAll(value, utils.CurQusPrefix, selector.CurItem().Qus)
-		selector.SetJmp(value)
-	}
 	afterActionFuncMap["img"] = func(selector *Selector, params []string) {
 		item := selector.CurItem()
 		for _, value := range params {

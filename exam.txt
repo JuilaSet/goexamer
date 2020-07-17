@@ -4,9 +4,9 @@ exit
 title: title!
 
 [调度系数测试]
-#A: 大大地
-#B: 保留, 保持, 维持, 记忆力
-#C: 集成, 整合
+#B:b
+#C:c
+#D:d
 
 [batch命令测试]
 \@link:A

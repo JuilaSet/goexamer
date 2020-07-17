@@ -12,15 +12,15 @@ const (
 )
 
 type Selector struct {
-	score            map[string]int     // 剩余需要进行的测试次数
-	arraySet         []string           // 调度顺序, 根据原始数据每次随机生成
-	i                int                // 当前位置只负责调度
-	curItem          *Item              // 当前item, 可能会出现当前的item与s.i指向不一样的情况
-	correctFrequency map[string]int     // item的出现次数
-	lastN            map[string]int     // item的上次出现次数
-	hotFactor        map[string]float64 // 熟悉因子
-	batch            *store.Batch
-	n                int						// 弹出item次数
+	score      map[string]int     // 剩余需要进行的测试次数
+	arraySet   []string           // 调度顺序, 根据原始数据每次随机生成
+	i          int                // 当前位置只负责调度
+	curItem    *Item              // 当前item, 可能会出现当前的item与s.i指向不一样的情况
+	lastWrongN map[string]int     // item的出现次数
+	lastN      map[string]int     // item的上次出现次数
+	hotFactor  map[string]float64 // 熟悉因子
+	batch      *store.Batch
+	n          int						// 弹出item次数
 }
 
 func NewSelector(batch *store.Batch) *Selector {
@@ -44,7 +44,7 @@ func (s *Selector) Init() {
 	s.arraySet = []string{}
 	for name := range s.batch.GetAllQus() {
 		s.score[name] = 1
-		s.correctFrequency[name] = 0
+		s.lastWrongN[name] = -1
 		s.hotFactor[name] = 1.5
 		s.lastN[name] = 0
 		s.arraySet = append(s.arraySet, name)
@@ -189,23 +189,20 @@ func (s *Selector) CalcDispatchCoefficient(q float64, correct bool) float64 {
 	name := s.curItem.Qus
 	s.n++
 	if correct {
-		s.correctFrequency[name]++
-		s.hotFactor[name] += q * float64(s.correctFrequency[name])
-	} else {
-		s.correctFrequency[name]--
-		if s.correctFrequency[name] < 0 {
-			s.correctFrequency[name] = 0
+		if s.lastWrongN[name] == -1 {
+			s.hotFactor[name] += q *  1.0
+		} else {
+			s.hotFactor[name] += q *  float64(s.n - s.lastN[name])
 		}
+	} else {
+		s.lastWrongN[name] = s.n
 		s.hotFactor[name] *= math.Exp(-C0 * float64(s.n - s.lastN[name]))
 	}
 	s.lastN[s.curItem.Qus] = s.n
-	// 其他项目
+	// 其他项目, 没有出现错误的是-1, 不需要进行计算
 	for qus := range s.hotFactor {
-		if qus != name {
-			s.hotFactor[qus] *= math.Exp(-C * float64(s.n - s.lastN[qus]))
-		}
-		if s.hotFactor[qus] < 0.01 {
-			s.hotFactor[qus] = 0.01
+		if qus != name && s.lastWrongN[qus] != -1 && !s.IsFinish(s.hotFactor[qus]){
+			s.hotFactor[qus] *= math.Exp(-C * float64(s.n-s.lastN[qus]))
 		}
 	}
 	return s.hotFactor[name]
@@ -213,7 +210,7 @@ func (s *Selector) CalcDispatchCoefficient(q float64, correct bool) float64 {
 
 // 是否完成
 func (s *Selector) IsFinish(ef float64) bool {
-	if ef >= 2.0 {
+	if ef >= 2.5 {
 		return true
 	}
 	return false

@@ -2,18 +2,29 @@ package controller
 
 import (
 	"github.com/pkg/errors"
-	"goexamer/params"
+	"goexamer/config"
 	"goexamer/router"
 	"goexamer/service"
+	"goexamer/store"
 	"goexamer/utils"
+	"runtime"
 	"strconv"
 )
 
-func ReadFile(){
+func ReadFile(fileName string){
+	// 错误日志
+	defer func(){
+		if err := recover(); err != nil {
+			runtime.Gosched()
+			config.OutPutter().Println(err)
+		}
+	}()
+
 	var pStart, pNewBatch, pReadLineOfTitle, pReadLineOfBatch, pReadLineOfItem, pSetTitle, pReadItem *router.State
 	var curState *router.State
 
-	service.ReadFile(params.GetInputFileName(), func(info *service.LineInfo) {
+	store.Init()
+	service.ReadFile(fileName, func(info *service.LineInfo) {
 		pStart = router.NewState(func() {}, func(input interface{}) {
 			switch rune(input.(rune)) {
 			case utils.BatchMark:

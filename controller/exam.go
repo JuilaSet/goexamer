@@ -2,6 +2,7 @@ package controller
 
 import (
 	"goexamer/config"
+	"goexamer/params"
 	"goexamer/router"
 	"goexamer/service"
 	"goexamer/store"
@@ -15,23 +16,41 @@ func init(){
 	ioTrigger = config.IoTrigger()
 }
 
+func pNo() {
+	service.SelectNo()
+}
+
+func pYes() {
+	service.SelectYes()
+}
+
+
 // 进行测试
 func Exam() {
-	var pItemQus, pItemAns, pStart, pFinish *router.State
-	var pSelectBatch, pNo, pYes func()
+	var pItemQus, pItemAns, pStart, pFinish, pSelectFile *router.State
+	var pSelectBatch func()
 	var curState *router.State
-
-	service.HelpMsg()
-	service.Title()
+	var lastFileName string
 
 	ioTrigger.ReadInput(func(msg *trigger.Msg, exit *bool) {
-		pNo = func() {
-			service.SelectNo()
-		}
-
-		pYes = func() {
-			service.SelectYes()
-		}
+		pSelectFile = router.NewState(func() {
+			if msg.Ctx != "" {
+				fileName := msg.Ctx
+				ReadFile(fileName)
+				lastFileName = fileName
+				service.Title()
+				service.HelpBatchMsg()
+			} else if lastFileName != ""{
+				ReadFile(lastFileName)
+				service.HelpBatchMsg()
+			}
+		}, func(input interface{}) {
+			switch input.(int) {
+			case views.SelectBatch:
+				pSelectBatch()
+				curState = pItemQus
+			}
+		})
 
 		pSelectBatch = func() {
 			service.Start(service.NewSelector(store.GetBatch(msg.Ctx)))
@@ -42,25 +61,24 @@ func Exam() {
 		}, func(input interface{}) {
 			switch input.(int) {
 			case views.SelectYes:
-				service.Restart()
+				service.Init()
 				curState = pItemQus
 			case views.SelectNo:
 				curState = pStart
-			case views.SelectPost:
+			case views.SelectBatch:
 				pSelectBatch()
 				curState = pItemQus
+			case views.SelectFile:
+				curState = pSelectFile
 			}
 		})
 
 		pStart = router.NewState(func() {
-			service.HelpMsg()
+			service.HelpFileMsg()
 		}, func(input interface{}) {
 			switch input.(int) {
-			case views.SelectPost:
-				pSelectBatch()
-				curState = pItemQus
-			default:
-				curState = pStart
+			case views.SelectFile:
+				curState = pSelectFile
 			}
 		})
 
@@ -78,11 +96,11 @@ func Exam() {
 			case views.SelectNo:
 				pNo()
 				curState = pItemQus
-			case views.SelectPost:
+			case views.SelectBatch:
 				pSelectBatch()
 				curState = pItemQus
-			default:
-				curState = pItemAns
+			case views.SelectFile:
+				curState = pSelectFile
 			}
 		})
 
@@ -90,16 +108,24 @@ func Exam() {
 			service.ItemQus()
 		}, func(input interface{}) {
 			switch input.(int) {
-			case views.SelectPost:
+			case views.SelectBatch:
 				pSelectBatch()
 				curState = pItemQus
+			case views.SelectFile:
+				curState = pSelectFile
 			default:
 				curState = pItemAns
 			}
 		})
 
 		if curState == nil {
-			curState = pStart
+			if fileName := params.GetInputFileName(); fileName != "" {
+				lastFileName = fileName
+				curState = pSelectFile
+			} else {
+				curState = pStart
+				service.HelpFileMsg()
+			}
 		}
 		curState.ChangeState(msg.Flag)
 		curState.Todo()

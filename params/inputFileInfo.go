@@ -19,7 +19,7 @@ var fileInfo InputFileInfo
 
 func init(){
 	// 输入文件的选择
-	fileInfo = InputFileInfo{"exam.txt"}
+	fileInfo = InputFileInfo{""}
 	// 注册方法
 	flag.CommandLine.Var(&fileInfo, "i", "input file's name")
 	// 解析

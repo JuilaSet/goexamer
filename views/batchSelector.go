@@ -28,7 +28,7 @@ func FromBatch() (mainWindow MainWindow) {
 				MinSize: Size{Width: 100, Height: 50},
 				Text: text,
 				OnClicked: func() {
-					communicator.Send(SelectPost, name)
+					communicator.Send(SelectBatch, name)
 					bmw.Close()
 				},
 			})

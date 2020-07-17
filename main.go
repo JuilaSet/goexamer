@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+	"goexamer/config"
 	"goexamer/controller"
+	"goexamer/params"
+	"goexamer/service"
 	"goexamer/views"
 	"os"
 	"runtime"
@@ -13,14 +16,19 @@ func main(){
 	defer func(){
 		if err := recover(); err != nil {
 			runtime.Gosched()
-			fmt.Println(err)
+			config.OutPutter().Println(err)
 		}
 	}()
 	// 启动状态机
 	go func(){
 		views.Wait()
 		controller.Init()
-		controller.ReadFile()
+		if fileName := params.GetInputFileName(); fileName != "" {
+			fmt.Println("-i", fileName)
+			controller.ReadFile(fileName)
+			service.Title()
+			service.HelpBatchMsg()
+		}
 		controller.Exam()
 		os.Exit(0)
 	}()

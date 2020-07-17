@@ -15,23 +15,24 @@ type MyMainWindow struct {
 var (
 	mw           *MyMainWindow
 	consoleTxt   *walk.TextEdit
-	slider		 *walk.Slider
-	aFontSlider	 *walk.Action
+	slider       *walk.Slider
+	aFontSlider  *walk.Action
 	communicator *Communicator
 )
 
 // 通讯协议
 const (
-	SelectPost = 2
-	SelectYes     = 1
-	SelectNo      = 0
-	TitlePrefix   =  "记忆小工具-"
+	SelectFile  = 3
+	SelectBatch = 2
+	SelectYes   = 1
+	SelectNo    = 0
+	TitlePrefix = "记忆小工具-"
 )
 
 // 通讯通道
 type Communicator struct {
 	flag chan int
-	ctx chan string
+	ctx  chan string
 }
 
 func NweCommunicator() (communicator *Communicator) {
@@ -54,13 +55,13 @@ func GetCommunicator() *Communicator {
 	return communicator
 }
 
-func init(){
+func init() {
 	communicator = NweCommunicator()
 	mw = new(MyMainWindow)
 	(MainWindow{
-		Title:  TitlePrefix,
-		MinSize: Size{400, 300},
-		Layout:  VBox{},
+		Title:    TitlePrefix,
+		MinSize:  Size{400, 300},
+		Layout:   VBox{},
 		AssignTo: &mw.MainWindow,
 		MenuItems: []MenuItem{
 			Menu{
@@ -70,6 +71,18 @@ func init(){
 						Text: "Batch Selector",
 						OnTriggered: func() {
 							FromBatch().Run()
+						},
+					},
+					Action{
+						Text: "File Selector",
+						OnTriggered: func() {
+							FromDir().Run()
+						},
+					},
+					Action{
+						Text: "Restart",
+						OnTriggered: func() {
+							communicator.Send(SelectFile, "")
 						},
 					},
 					Action{
@@ -85,7 +98,7 @@ func init(){
 				Items: []MenuItem{
 					Action{
 						AssignTo: &aFontSlider,
-						Text: "Font Size Slider",
+						Text:     "Font Size Slider",
 						OnTriggered: func() {
 							slider.SetVisible(!slider.Visible())
 							if slider.Visible() {
@@ -99,7 +112,7 @@ func init(){
 			},
 		},
 		Children: []Widget{
-			TextEdit{AssignTo: &consoleTxt, ReadOnly:true, HScroll: true, VScroll: true, Font: Font{PointSize:12}},
+			TextEdit{AssignTo: &consoleTxt, ReadOnly: true, HScroll: true, VScroll: true, Font: Font{PointSize: 12}},
 			Slider{
 				ColumnSpan: 1,
 				AssignTo:   &slider,
@@ -115,14 +128,14 @@ func init(){
 				Children: []Widget{
 					PushButton{
 						MinSize: Size{100, 50},
-						Text: "Yes!",
+						Text:    "Yes!",
 						OnClicked: func() {
 							communicator.Send(SelectYes, "")
 						},
 					},
 					PushButton{
 						MinSize: Size{100, 50},
-						Text: "No!",
+						Text:    "No!",
 						OnClicked: func() {
 							communicator.Send(SelectNo, "")
 						},
@@ -134,7 +147,7 @@ func init(){
 	slider.SetVisible(false)
 }
 
-func Wait(){
+func Wait() {
 	for {
 		if consoleTxt != nil && mw != nil && slider != nil {
 			return
@@ -142,21 +155,21 @@ func Wait(){
 	}
 }
 
-func Clear(){
+func Clear() {
 	consoleTxt.SetText("")
 }
 
 func SetText(str string) {
 	if consoleTxt != nil {
 		str = consoleTxt.Text() + str
-		str = strings.ReplaceAll(str,"\n", "\r\n")
+		str = strings.ReplaceAll(str, "\n", "\r\n")
 		consoleTxt.SetText(str)
 		return
 	}
 	panic(errors.New("consoleTxt is nil"))
 }
 
-func SetTitle(str... string) {
+func SetTitle(str ...string) {
 	if mw != nil {
 		mw.SetTitle(TitlePrefix + strings.Join(str, ""))
 		return
