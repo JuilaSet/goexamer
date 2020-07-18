@@ -1,41 +1,22 @@
-..\..\goexam.exe -i goroutine.bat
+.\goexam.exe -i 00basic.bat
 exit
 
-title: title!
+
+title:
 
 [调度系数测试]
 #B:b
 #C:c
 #D:d
+@img:miao.jpg
+#减少测试:
 
 [batch命令测试]
-\@link:A
-\not action A
-\not action B
-#A:aaa
-\aaaa
+not action A
+not action B
+
+#A:
+@qus:aaaaa
+
 #B:bbb
 #C:cccc
-
-[命令测试]
-#换行测试: line1
-\@@qus:line2
-#img: 12
-\@img:timg.jpg:miao.jpg
-
-[跳转测试]
-#强制跳转测试:
-\@jmp:~
-#跳转自己测试: self
-\@link:~
-
-[分值测试]
-#set测试:
-\@set:10
-#set其他项目:
-\@set:其他项目:100
-#其他项目:
-#自加测试:
-\@mark:~
-#减少测试:
-\@deduct:~

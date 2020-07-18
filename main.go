@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"goexamer/config"
 	"goexamer/controller"
 	"goexamer/params"
 	"goexamer/service"
@@ -16,7 +15,7 @@ func main(){
 	defer func(){
 		if err := recover(); err != nil {
 			runtime.Gosched()
-			config.OutPutter().Println(err)
+			fmt.Println(err)
 		}
 	}()
 	// 启动状态机

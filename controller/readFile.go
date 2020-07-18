@@ -2,24 +2,14 @@ package controller
 
 import (
 	"github.com/pkg/errors"
-	"goexamer/config"
 	"goexamer/router"
 	"goexamer/service"
 	"goexamer/store"
 	"goexamer/utils"
-	"runtime"
 	"strconv"
 )
 
 func ReadFile(fileName string){
-	// 错误日志
-	defer func(){
-		if err := recover(); err != nil {
-			runtime.Gosched()
-			config.OutPutter().Println(err)
-		}
-	}()
-
 	var pStart, pNewBatch, pReadLineOfTitle, pReadLineOfBatch, pReadLineOfItem, pSetTitle, pReadItem *router.State
 	var curState *router.State
 
@@ -27,14 +17,12 @@ func ReadFile(fileName string){
 	service.ReadFile(fileName, func(info *service.LineInfo) {
 		pStart = router.NewState(func() {}, func(input interface{}) {
 			switch rune(input.(rune)) {
-			case utils.BatchMark:
-				curState = pNewBatch
 			case utils.TitleMark:
 				curState = pSetTitle
-			case utils.ItemMark:
-				curState = pReadItem
 			default:
-				panic(errors.New("line[" + strconv.Itoa(info.N) + "] Need batch, title or item here"))
+				// 直到读到title为止
+				curState = pStart
+				//panic(errors.New("line[" + strconv.Itoa(info.N) + "] Need batch, title or item here"))
 			}
 		})
 		pReadItem = router.NewState(func() {
