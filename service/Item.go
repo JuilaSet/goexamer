@@ -14,7 +14,6 @@ type Action struct {
 
 type Item struct {
 	Qus string
-	Ans []string
 	ActionBefore, ActionMid, ActionAfter []Action
 }
 
@@ -29,33 +28,31 @@ func init() {
 }
 
 func setFunc(item *Item, line string) {
-	// 特殊动作
-	action, param := utils.GetActionStr(line)
-	if bFunc, ok := beforeActionFuncMap[action]; ok {
-		item.ActionBefore = append(item.ActionBefore, Action{action, param, bFunc})
-	}
-	if midFunc, ok := midActionFuncMap[action]; ok {
-		item.ActionMid = append(item.ActionMid, Action{action, param, midFunc})
-	}
-	if aFunc, ok := afterActionFuncMap[action]; ok {
-		item.ActionAfter = append(item.ActionAfter, Action{action, param, aFunc})
+	if strings.HasPrefix(line, utils.ActionPrefix) {
+		action, param := utils.GetActionStr(line)
+		if bFunc, ok := beforeActionFuncMap[action]; ok {
+			item.ActionBefore = append(item.ActionBefore, Action{action, param, bFunc})
+		}
+		if midFunc, ok := midActionFuncMap[action]; ok {
+			item.ActionMid = append(item.ActionMid, Action{action, param, midFunc})
+		}
+		if aFunc, ok := afterActionFuncMap[action]; ok {
+			item.ActionAfter = append(item.ActionAfter, Action{action, param, aFunc})
+		}
+	} else {
+		item.ActionAfter = append(item.ActionAfter, Action{"line", []string{line}, afterActionFuncMap["line"]})
 	}
 }
 
 func NewItem(qus string, rawAns []string) (item *Item) {
 	item = &Item{
 		qus,
-		make([]string, 0),
 		make([]Action, 0),
 		make([]Action, 0),
 		make([]Action, 0),
 	}
 	for _, line := range rawAns {
-		if strings.HasPrefix(line, utils.ActionPrefix) {
-			setFunc(item, line)
-		} else {
-			item.Ans = append(item.Ans, line)
-		}
+		setFunc(item, line)
 	}
 	return
 }

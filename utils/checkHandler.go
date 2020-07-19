@@ -2,6 +2,7 @@ package utils
 
 import (
 	"regexp"
+	"strings"
 )
 
 const (
@@ -16,9 +17,10 @@ const (
 )
 
 const (
-	Batch    = `^(\[.*?\])`
-	Item     = `^(#.+:)`
-	Title    = `^title:.*`
+	Batch   = `^(\[.*?\])`
+	Item    = `^(#.+:)`
+	Title   = `^title:.*`
+	Comment = `:`
 )
 
 const (
@@ -36,7 +38,7 @@ func CheckFileHandler() func(line string, n int) (errMsg string, noFailed bool, 
 	var fileLinesMark rune
 	ruleStrArr := []string{Batch, Item, Title}	// 匹配规则
 	return func(line string, n int) (string, bool, rune) {
-		if line == "" {
+		if line == "" || strings.HasPrefix(line, Comment) {
 			fileLinesMark = EmptyMark
 		} else {
 			matchFailed := true

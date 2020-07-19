@@ -61,9 +61,10 @@ func InitBeforeActionFunc(){
 
 func InitMidActionFunc() {
 	midActionFuncMap["qus"] = func(selector *Selector, params []string) {
-		for _, v := range params {
-			output.Println(v)
-		}
+		output.Println(strings.Join(params, ":"))
+	}
+	midActionFuncMap["ext"] = func(selector *Selector, params []string) {
+		output.Println(strings.Join(params, ":"))
 	}
 }
 
@@ -77,5 +78,11 @@ func InitAfterActionFunc() {
 			}(value)
 			time.Sleep(600 * time.Millisecond)
 		}
+	}
+	afterActionFuncMap["ext"] = func(selector *Selector, params []string) {
+		output.Println(strings.Join(params, ":"))
+	}
+	afterActionFuncMap["line"] = func(selector *Selector, params []string) {
+		output.Println(strings.Join(params, ""))
 	}
 }

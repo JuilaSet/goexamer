@@ -4,19 +4,10 @@ exit
 
 title:
 
-[调度系数测试]
-#B:b
-#C:c
-#D:d
-@img:miao.jpg
-#减少测试:
+: asd
 
-[batch命令测试]
-not action A
-not action B
-
-#A:
-@qus:aaaaa
-
-#B:bbb
-#C:cccc
+[换行测试]
+#A:ccc
+:ddddd:ppp
+:@qus:qusuqqsq
+:@ext:extextas:ppp

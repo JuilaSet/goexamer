@@ -61,14 +61,14 @@ func ReadBatchLine(line string) {
 	if lastBatch == nil  {
 		panic(errors.New("unknown error " + line))
 	}
-	lastBatch.AppendLine(line[1:])
+	lastBatch.AppendLine(line)
 }
 
 func NewBatch(line string) {
 	if rule, _ := regexp.Compile(utils.Batch); !rule.MatchString(line) {
 		panic(errors.New("unknown error " + line))
 	}
-	lastBatch = store.CreateBatch(line)
+	lastBatch = store.CreateBatch(line[1:len(line)-1])
 	store.SaveBatch(lastBatch)
 }
 
@@ -106,7 +106,9 @@ func ReadFile(fileName string, controllerCallBack func(info *LineInfo)) string {
 			titleSet = true
 		}
 		if titleSet {
-			line = strings.TrimSpace(line)
+			if fileLinesMark != utils.LineMark {
+				line = strings.TrimSpace(line)
+			}
 			if fileLinesMark != utils.EmptyMark {
 				markString += string(fileLinesMark)
 			}

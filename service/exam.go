@@ -58,8 +58,10 @@ func Batch() {
 	selector.SetCurItemDangerous(item)
 	batchMsg = "======================\n" +
 	" chapter: " + item.Qus + "\n"
-	for _, line := range item.Ans {
-		batchMsg += " " + line + "\n"
+	for _, line := range item.ActionAfter {
+		if line.Name == "line" {
+			batchMsg += " " + line.Param[0] + "\n"
+		}
 	}
 	batchMsg += "======================" + "\n"
 	selector.ExecuteBeforeFunc()
@@ -87,22 +89,14 @@ func ItemQus() {
 	selector.SetNext(selector.MinHotFactorItemName())
 	selector.ExecuteBeforeFunc()
 	item, totalCount := selector.PopItem(), len(selector.Batch().GetAllQus())
-	output.Println("(" + strconv.Itoa(selector.FinishCount()) + "/" + strconv.Itoa(totalCount) + ")question^" +
-		selector.DispatchCoefficientString(item.Qus) + ":", item.Qus)
+	output.Println("(" + strconv.Itoa(selector.FinishCount()) + "/" + strconv.Itoa(totalCount) + ")question^" + selector.DispatchCoefficientString(item.Qus) + ":" + item.Qus)
 	selector.ExecuteMidFunc()
 }
 
 func ItemAns() {
 	// 显示问题
-	item := selector.CurItem()
-	var ansStr = "ans:" + func() (str string) {
-		for _, line := range item.Ans {
-			str += line + "\n"
-		}
-		return
-	}()
+	output.Println("ans:")
 	selector.ExecuteAfterFunc()
-	output.Println(ansStr)
 	output.Print("(y/N)-> ")
 }
 
