@@ -87,8 +87,7 @@ func FromDir() (mainWindow MainWindow) {
 	return
 }
 
-func (mw *fileSelectorMainWindow) CurrentIndexChanged() {
-}
+func (mw *fileSelectorMainWindow) CurrentIndexChanged() {}
 
 func (mw *fileSelectorMainWindow) ItemActivated() {
 	name := mw.model.items[mw.lb.CurrentIndex()].Name

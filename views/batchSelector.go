@@ -15,7 +15,7 @@ type batchSelectorMainWindow struct {
 	*walk.MainWindow
 }
 
-func FromBatch() (mainWindow MainWindow) {
+func FromBatchGroup() (mainWindow MainWindow) {
 	var ws []Widget
 	var bmw = new(batchSelectorMainWindow)
 	for _, batch := range store.BatchArray() {

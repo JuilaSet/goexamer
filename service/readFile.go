@@ -92,6 +92,7 @@ func ReadItem(line string) {
 }
 
 func ReadFile(fileName string, controllerCallBack func(info *LineInfo)) string {
+	store.SetFileName(fileName)
 	file, err := os.Open(fileName)
 	if err != nil {
 		panic(err)
@@ -125,9 +126,12 @@ func ReadFile(fileName string, controllerCallBack func(info *LineInfo)) string {
 					info.Mark = fileLinesMark
 					info.Line = line
 					info.N = n
+					// 状态机切换
 					controllerCallBack(info)
 				}
 			}
+		}else{
+			store.AppendBeforeTitle(line + "\n")
 		}
 	})
 

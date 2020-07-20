@@ -269,9 +269,9 @@ package main
 //		return
 //	}())
 //
-//	if batch.Name != "" {
+//	if batch.Qus != "" {
 //		output.Println("======================")
-//		output.Println(" chapter: ", batch.Name)
+//		output.Println(" chapter: ", batch.Qus)
 //		output.Println("======================", "\n")
 //	}
 //

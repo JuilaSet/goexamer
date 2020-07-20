@@ -4,8 +4,11 @@ import (
 	"goexamer/config"
 	"goexamer/io"
 	"goexamer/store"
+	"goexamer/utils"
 	"goexamer/views"
+	"regexp"
 	"strconv"
+	"strings"
 )
 
 var output io.OutPutter // 输出器
@@ -82,6 +85,10 @@ func IsEnd() bool {
 	return selector != nil && !selector.HasNext()
 }
 
+func RefreshItemQus() {
+	selector.RefreshCurItem()
+}
+
 func ItemQus() {
 	output.Clear()
 	BatchName()
@@ -92,6 +99,21 @@ func ItemQus() {
 	output.Println("(" + strconv.Itoa(selector.FinishCount()) + "/" + strconv.Itoa(totalCount) + ")question^" + selector.DispatchCoefficientString(item.Qus) + ":" + item.Qus)
 	selector.ExecuteMidFunc()
 }
+
+func ItemAnsRefresh() {
+	output.Clear()
+	BatchName()
+	item, totalCount := selector.CurItem(), len(selector.Batch().GetAllQus())
+	selector.ExecuteBeforeFuncFromItem(item)
+	output.Println("(" + strconv.Itoa(selector.FinishCount()) + "/" + strconv.Itoa(totalCount) + ")question^" +
+		selector.DispatchCoefficientString(item.Qus) + ":" + item.Qus)
+	selector.ExecuteMidFunc()
+	// 显示问题
+	output.Println("ans:")
+	selector.ExecuteAfterFunc()
+	output.Print("(y/N)-> ")
+}
+
 
 func ItemAns() {
 	// 显示问题
@@ -108,4 +130,40 @@ func SelectYes() {
 
 func SelectNo() {
 	selector.CalcDispatchCoefficient(0, false)
+}
+
+func EditItem() {
+	views.FromItem(selector.Batch().Name).Run()
+}
+
+func SaveItem(itemString string) {
+	check := utils.CheckLinesHandler()
+	lines := strings.Split(itemString, "\n")
+	var formatMarks []string
+	// 语法检查
+	for n, line := range lines {
+		_, _, m := check(line, n)
+		formatMarks = append(formatMarks, string(m))
+	}
+	if rule, _ := regexp.Compile(utils.ItemFormatRule); rule.MatchString(strings.Join(formatMarks, "")) {
+		var qus string
+		var ans []string
+		for _, line := range lines {
+			// 取出item header
+			utils.GetPair(line, func(s string) bool {
+				if s == "" {
+					return false
+				} else if strings.HasPrefix(s, utils.ItemPrefix) {
+					return true
+				} else {
+					ans = append(ans, line)
+					return false
+				}
+			})(func(pair [2]string) {
+				qus = pair[0]
+				ans = append(ans, pair[1])
+			})
+		}
+		selector.AddNewItem(qus, ans)
+	}
 }

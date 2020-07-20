@@ -1,13 +1,24 @@
-.\goexam.exe -i 00basic.bat
-exit
+asdasda
+asdasd
 
 
-title:
+title:Hello
 
-: asd
+
 
 [换行测试]
+
+#B:bbb
+kdj
+
 #A:ccc
-:ddddd:ppp
-:@qus:qusuqqsq
-:@ext:extextas:ppp
+
+
+[测试2]
+
+#B2:bbb2
+kfc2
+@ans:wpf2
+
+#A2:ccc2
+

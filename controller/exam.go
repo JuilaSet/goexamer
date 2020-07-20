@@ -28,11 +28,32 @@ func pYes() {
 // 进行测试
 func Exam() {
 	var pItemQus, pItemAns, pStart, pFinish, pSelectFile *router.State
-	var pSelectBatch func()
+	var pSelectBatch, pSaveFile, pItemEditor, pItemSave func()
 	var curState *router.State
 	var lastFileName string
+	var canExecute  = true
 
 	ioTrigger.ReadInput(func(msg *trigger.Msg, exit *bool) {
+		pSaveFile = func(){
+			service.SaveFile()
+			canExecute = false
+		}
+
+		pSelectBatch = func() {
+			service.Start(service.NewSelector(store.GetBatch(msg.Ctx)))
+		}
+
+		pItemEditor = func(){
+			service.EditItem()
+			canExecute = false
+		}
+
+		pItemSave = func(){
+			service.SaveItem(msg.Ctx)
+			service.RefreshItemQus()
+			canExecute = false
+		}
+
 		pSelectFile = router.NewState(func() {
 			if msg.Ctx != "" {
 				fileName := msg.Ctx
@@ -49,12 +70,10 @@ func Exam() {
 			case views.SelectBatch:
 				pSelectBatch()
 				curState = pItemQus
+			case views.SelectSave:
+				pSaveFile()
 			}
 		})
-
-		pSelectBatch = func() {
-			service.Start(service.NewSelector(store.GetBatch(msg.Ctx)))
-		}
 
 		pFinish = router.NewState(func() {
 			service.FinishMsg()
@@ -70,6 +89,12 @@ func Exam() {
 				curState = pItemQus
 			case views.SelectFile:
 				curState = pSelectFile
+			case views.SelectSave:
+				pSaveFile()
+			case views.SelectItemEdit:
+				pItemEditor()
+			case views.SelectItemSave:
+				pItemSave()
 			}
 		})
 
@@ -101,6 +126,13 @@ func Exam() {
 				curState = pItemQus
 			case views.SelectFile:
 				curState = pSelectFile
+			case views.SelectSave:
+				pSaveFile()
+			case views.SelectItemEdit:
+				pItemEditor()
+			case views.SelectItemSave:
+				pItemSave()
+				service.ItemAnsRefresh()
 			}
 		})
 
@@ -113,7 +145,13 @@ func Exam() {
 				curState = pItemQus
 			case views.SelectFile:
 				curState = pSelectFile
-			default:
+			case views.SelectSave:
+				pSaveFile()
+			case views.SelectItemEdit:
+				pItemEditor()
+			case views.SelectItemSave:
+				pItemSave()
+			case views.SelectYes, views.SelectNo:
 				curState = pItemAns
 			}
 		})
@@ -128,6 +166,9 @@ func Exam() {
 			}
 		}
 		curState.ChangeState(msg.Flag)
-		curState.Todo()
+		if canExecute {
+			curState.Todo()
+		}
+		canExecute = true
 	})
 }

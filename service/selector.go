@@ -53,6 +53,19 @@ func (s *Selector) Init() {
 	s.n = 0
 }
 
+// 添加新的项目
+func (s *Selector) AddNewItem(qus string, ans []string){
+	if _, ok := selector.batch.GetAllQus()[qus]; !ok {
+		s.Batch().WriteQus(qus, ans)
+		s.score[qus] = 1
+		s.lastWrongN[qus] = -1
+		s.hotFactor[qus] = 1.5
+		s.lastN[qus] = 0
+		s.arraySet = append(s.arraySet, qus)
+	}
+	selector.batch.WriteQus(qus, ans)
+}
+
 // 当前完成进度
 func (s *Selector) FinishCount() (c int) {
 	for _, score := range s.score {
@@ -157,6 +170,13 @@ func (s *Selector) NextItem() (*Item, int) {
 	}
 }
 
+// 刷新Item
+func (s *Selector) RefreshCurItem() {
+	qus := s.curItem.Qus
+	refreshedItem := NewItem(qus, s.batch.GetAllQus()[qus])
+	s.curItem = refreshedItem
+}
+
 // 取出一个Item, 指针指向当前item, 只弹出剩余测试大于0的
 func (s *Selector) PopItem() *Item {
 	s.curItem, s.i = s.NextItem()
@@ -244,12 +264,17 @@ func (s *Selector) SetScore(itemName string, v int) {
 }
 
 // 执行命令
-func (s *Selector) ExecuteBeforeFunc() {
-	item, _ := s.NextItem()
+func (s *Selector) ExecuteBeforeFuncFromItem(item *Item){
 	for _, action := range item.ActionBefore {
 		action.Func(s, action.Param)
 	}
 }
+
+func (s *Selector) ExecuteBeforeFunc() {
+	item, _ := s.NextItem()
+	s.ExecuteBeforeFuncFromItem(item)
+}
+
 func (s *Selector) ExecuteMidFunc() {
 	for _, action := range s.curItem.ActionMid{
 		action.Func(s, action.Param)

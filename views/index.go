@@ -22,11 +22,14 @@ var (
 
 // 通讯协议
 const (
-	SelectFile  = 3
-	SelectBatch = 2
-	SelectYes   = 1
-	SelectNo    = 0
-	TitlePrefix = "记忆小工具-"
+	SelectItemSave = 6
+	SelectItemEdit = 5
+	SelectSave     = 4
+	SelectFile     = 3
+	SelectBatch    = 2
+	SelectYes      = 1
+	SelectNo       = 0
+	TitlePrefix    = "记忆小工具 "
 )
 
 // 通讯通道
@@ -68,15 +71,15 @@ func init() {
 				Text: "File",
 				Items: []MenuItem{
 					Action{
-						Text: "Batch Selector",
+						Text: "Open",
 						OnTriggered: func() {
-							FromBatch().Run()
+							FromDir().Run()
 						},
 					},
 					Action{
-						Text: "File Selector",
+						Text: "Save",
 						OnTriggered: func() {
-							FromDir().Run()
+							communicator.Send(SelectSave, "")
 						},
 					},
 					Action{
@@ -89,6 +92,23 @@ func init() {
 						Text: "Exit",
 						OnTriggered: func() {
 							os.Exit(0)
+						},
+					},
+				},
+			},
+			Menu{
+				Text: "Batch",
+				Items: []MenuItem{
+					Action{
+						Text: "Select Batch",
+						OnTriggered: func() {
+							FromBatchGroup().Run()
+						},
+					},
+					Action{
+						Text: "Edit Item",
+						OnTriggered: func() {
+							communicator.Send(SelectItemEdit, "")
 						},
 					},
 				},
@@ -127,14 +147,14 @@ func init() {
 			HSplitter{
 				Children: []Widget{
 					PushButton{
-						MinSize: Size{100, 50},
+						MinSize: Size{80, 50},
 						Text:    "Yes!",
 						OnClicked: func() {
 							communicator.Send(SelectYes, "")
 						},
 					},
 					PushButton{
-						MinSize: Size{100, 50},
+						MinSize: Size{80, 50},
 						Text:    "No!",
 						OnClicked: func() {
 							communicator.Send(SelectNo, "")
@@ -153,6 +173,10 @@ func Wait() {
 			return
 		}
 	}
+}
+
+func ReadOnly(b bool){
+	consoleTxt.SetReadOnly(b)
 }
 
 func Clear() {

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"goexamer/utils"
+	"io/ioutil"
 	"os"
 )
 
@@ -17,7 +18,7 @@ func EachLine(file *os.File) func(todoFunc) {
 		errMsg string
 		noFailed bool
 		fileLinesMark rune
-		check = utils.CheckFileHandler()
+		check = utils.CheckLinesHandler()
 	)
 	return func(todo todoFunc){
 		count = 0
@@ -36,6 +37,6 @@ func EachLine(file *os.File) func(todoFunc) {
 	}
 }
 
-//func Write(filename string, data string) {
-//	ioutil.WriteFile(filename, []byte(data), 0664)
-//}
+func Write(filename string, data string) {
+	ioutil.WriteFile(filename, []byte(data), 0664)
+}
