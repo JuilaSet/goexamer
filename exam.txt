@@ -5,8 +5,8 @@ title: 处理机调度
 
 
 [测试tempVar]
-@defReg:a$1b$0:$1c$0
+@defReg:a$0b$1c:$1$0
 
-#A:a1b0
+#A:aAbBcXX
 
 

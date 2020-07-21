@@ -109,66 +109,57 @@ func (s *Selector) ReplaceStringAccordingToTempVar(k string) (r string) {
 }
 
 // 正则替换
-func (s *Selector) ReplaceStringAccordingToTempReg(str string, pair Pair) (raw string) {
+func (s *Selector) ReplaceStringAccordingToTempReg(raw string, pair Pair) (r string) {
 	go func() {
 		if err := recover(); err != nil {
 			fmt.Println(err)
 		}
 	}()
-	raw = str
-	rule := pair.K	// 规则也需要进行迁移
-	ruleV := pair.V
-	fmt.Print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-	// $n = $0...$9
-	for i := 0; i <= 9; i++ {
-		mark := "$" + strconv.Itoa(i)
-		rStr := strings.ReplaceAll(rule, mark, ".+?")
-		rcStr := "(?<=" + strings.ReplaceAll(rule, mark, ").+?(?=") + ")"
+	r = raw
+	rule := struct{ src, tar string }{pair.K, pair.V} // 规则也需要进行迁移
+	// $n = $0...$9暂时未实现
 
-		low := strconv.Itoa(int(math.Max(float64(i-1), float64(0))))
-		high := strconv.Itoa(int(math.Min(float64(i+1), float64(9))))
-		allMark, err := regexp.Compile(`\$([0-` + low + high + `-9])`)
-		if err != nil {
-			panic(err)
+	
+	i := 0
+	mark := "$" + strconv.Itoa(i)
+	rStr := strings.ReplaceAll(rule.src, mark, ".+?")
+	rcStr := "(?<=" + strings.ReplaceAll(rule.tar, mark, ").+?(?=") + ")"
+
+	// 忽视$n(n!=i)
+	low := strconv.Itoa(int(math.Max(float64(i-1), float64(0))))
+	high := strconv.Itoa(int(math.Min(float64(i+1), float64(9))))
+	allMark, err := regexp.Compile(`\$([0-` + low + high + `-9])`)
+	if err != nil {
+		panic(err)
+	}
+	rStr = allMark.ReplaceAllString(rStr, ".+?")
+	rcStr = allMark.ReplaceAllString(rcStr, ".+?")
+
+	Rn, err := regexp2.Compile(rStr, 0)
+	if err != nil {
+		panic(err)
+	}
+	Rcn, err := regexp2.Compile(rcStr, 0)
+	if err != nil {
+		panic(err)
+	}
+
+	// 通过原始字符串确定各个位置的$n的值
+	var MRn, MRcn *regexp2.Match
+	MRn, err = Rn.FindStringMatch(raw)
+	MRcn, err = Rcn.FindStringMatch(raw)
+	if err != nil {
+		panic(err)
+	}
+	if MRn != nil && MRcn != nil {
+		var R []string
+		for _, v := range MRcn.Groups()[0].Captures {
+			R = append(R, strings.ReplaceAll(rule.tar, mark, v.String()))
 		}
-		rStr = allMark.ReplaceAllString(rStr, ".+?")
-		rcStr = allMark.ReplaceAllString(rcStr, ".+?")
 
-		Rn, err := regexp2.Compile(rStr, 0)
-		if err != nil {
-			panic(err)
-		}
-		Rcn, err := regexp2.Compile(rcStr, 0)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println("R"+mark, Rn)
-		fmt.Println("Rc"+mark, Rcn)
-
-		fmt.Println("raw in "+mark, raw)
-		MRn, err := Rn.FindStringMatch(raw)
-		MRcn, err := Rcn.FindStringMatch(raw)
-		if err != nil {
-			panic(err)
-		}
-		if MRn != nil && MRcn != nil {
-			fmt.Println("MR"+mark, MRn)
-			fmt.Println("MRc"+mark, MRcn)
-
-			var R []string
-			for _, v := range MRcn.Groups()[0].Captures {
-				R = append(R, strings.ReplaceAll(pair.V, mark, v.String()))
-			}
-			fmt.Println("R", R)
-
-			for i, v := range MRn.Groups()[0].Captures {
-				raw = strings.ReplaceAll(raw, v.String(), R[i])
-			}
-			fmt.Println("raw", raw)
-
-			// 规则的映射
-			rule = strings.ReplaceAll(ruleV, mark, ".+")
-			ruleV = rule
+		fmt.Println(mark, "=", MRcn, r, raw)
+		for i, v := range MRn.Groups()[0].Captures {
+			r = strings.ReplaceAll(r, v.String(), R[i])
 		}
 	}
 	return
