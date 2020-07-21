@@ -8,6 +8,7 @@ import (
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
 	"goexamer/store"
+	"math"
 	"strings"
 )
 
@@ -46,10 +47,6 @@ func NewItemInfoModel(batchName string) *ItemInfoModel {
 }
 
 func (mw *itemEditMainWindow) CurrentIndexChanged() {
-	mw.ItemActivated()
-}
-
-func (mw *itemEditMainWindow) ItemActivated() {
 	qus := mw.model.items[mw.lb.CurrentIndex()]
 	qusStr, ansArr := qus.Qus, qus.Ans
 	s := "#" + qusStr + ":"
@@ -57,6 +54,12 @@ func (mw *itemEditMainWindow) ItemActivated() {
 		s += line + "\r\n"
 	}
 	mw.txt.SetText(s)
+}
+
+func (mw *itemEditMainWindow) ItemActivated() {
+	str := strings.ReplaceAll(mw.txt.Text(), "\r\n", "\n")
+	communicator.Send(SelectItemSave, str)
+	mw.Close()
 }
 
 func FromItem(batchName string) (mainWindow MainWindow) {
@@ -70,21 +73,27 @@ func FromItem(batchName string) (mainWindow MainWindow) {
 		Layout:   VBox{},
 		MenuItems: []MenuItem{
 			Action{
-				Text: "Save Edit",
+				Text: "Save Item",
 				OnTriggered: func() {
-					str := strings.ReplaceAll(imw.txt.Text(), "\r\n", "\n")
-					communicator.Send(SelectItemSave, str)
-					imw.Close()
+					imw.ItemActivated()
 				},
 			},
 		},
 		Children: []Widget{
-			TextEdit{AssignTo: &imw.txt, ReadOnly: false, HScroll: true, VScroll: true, Font: Font{PointSize: 12}},
+			TextEdit{
+				AssignTo: &imw.txt,
+				ReadOnly: false,
+				HScroll: true,
+				VScroll: true,
+				Font: Font{PointSize: 12},
+				MinSize:Size{Width: 300, Height: 200},
+			},
 			ListBox{
 				AssignTo: &imw.lb,
 				Model: imw.model,
 				OnCurrentIndexChanged: imw.CurrentIndexChanged,
 				OnItemActivated:       imw.ItemActivated,
+				MinSize:Size{Width: 300, Height: int(math.Min(float64(25 * len(imw.model.items)), 125.0))},
 			},
 		},
 	}

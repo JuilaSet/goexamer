@@ -137,11 +137,16 @@ func (b *Batch) IsEmpty() bool {
 }
 
 func (b *Batch) ToString() (str string) {
+	if len(b.store) <= 0 {
+		return ""
+	}
 	if b.Name != "" {
 		str = "[" + b.Name + "]\n"
 		for _, batchLine := range b.lines {
 			str += batchLine + "\n"
 		}
+	} else {
+		str = "[<default batch>]\n"
 	}
 	str += "\n"
 	for qus, ans := range b.store {
