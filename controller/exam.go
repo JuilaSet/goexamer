@@ -54,6 +54,15 @@ func Exam() {
 			canExecute = false
 		}
 
+		pStart = router.NewState(func() {
+			service.HelpFileMsg()
+		}, func(input interface{}) {
+			switch input.(int) {
+			case views.SelectFile:
+				curState = pSelectFile
+			}
+		})
+
 		pSelectFile = router.NewState(func() {
 			if msg.Ctx != "" {
 				fileName := msg.Ctx
@@ -80,7 +89,7 @@ func Exam() {
 		}, func(input interface{}) {
 			switch input.(int) {
 			case views.SelectYes:
-				service.Init()
+				service.RestartBatch()
 				curState = pItemQus
 			case views.SelectNo:
 				curState = pStart
@@ -95,15 +104,6 @@ func Exam() {
 				pItemEditor()
 			case views.SelectItemSave:
 				pItemSave()
-			}
-		})
-
-		pStart = router.NewState(func() {
-			service.HelpFileMsg()
-		}, func(input interface{}) {
-			switch input.(int) {
-			case views.SelectFile:
-				curState = pSelectFile
 			}
 		})
 

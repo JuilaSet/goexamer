@@ -33,4 +33,5 @@ func main(){
 	}()
 	// 启动视图进程
 	views.Index()
+	os.Exit(0)
 }

@@ -1,15 +1,24 @@
 package service
 
 import (
+	"fmt"
+	"github.com/dlclark/regexp2"
 	"goexamer/store"
 	"math"
+	"regexp"
 	"strconv"
+	"strings"
 )
 
 const (
-	C = 0.3 // 冷却系数
+	C  = 0.3 // 冷却系数
 	C0 = 0.5
 )
+
+type Pair struct {
+	K, V     string
+	IsRegExp bool
+}
 
 type Selector struct {
 	score      map[string]int     // 剩余需要进行的测试次数
@@ -20,7 +29,8 @@ type Selector struct {
 	lastN      map[string]int     // item的上次出现次数
 	hotFactor  map[string]float64 // 熟悉因子
 	batch      *store.Batch
-	n          int						// 弹出item次数
+	n          int    // 弹出item次数
+	tempVar    []Pair // 临时变量, 用于替换输出的字符串
 }
 
 func NewSelector(batch *store.Batch) *Selector {
@@ -34,6 +44,7 @@ func NewSelector(batch *store.Batch) *Selector {
 		make(map[string]float64),
 		batch,
 		0,
+		[]Pair{},
 	}
 	s.Init()
 	return s
@@ -42,25 +53,135 @@ func NewSelector(batch *store.Batch) *Selector {
 // 置为初始状态
 func (s *Selector) Init() {
 	s.arraySet = []string{}
+	s.tempVar = []Pair{}
 	for name := range s.batch.GetAllQus() {
 		s.score[name] = 1
 		s.lastWrongN[name] = -1
 		s.hotFactor[name] = 1.5
-		s.lastN[name] = 0
+		s.lastN[name] = -1
 		s.arraySet = append(s.arraySet, name)
 	}
 	s.i = 0
 	s.n = 0
 }
 
+// 添加临时变量
+func (s *Selector) SetTempVar(k string, value string, rewrite bool, isReg bool) {
+	if rewrite {
+		for index, pair := range s.tempVar {
+			if strings.Compare(pair.K, k) == 0 {
+				s.tempVar[index].V = value
+				return
+			}
+		}
+	}
+	s.tempVar = append(s.tempVar, Pair{k, value, isReg})
+}
+
+// 添加临时变量
+func (s *Selector) RemoveTempVar(k string) {
+	for index := 0; index < len(s.tempVar); index++ {
+		if strings.Compare(s.tempVar[index].K, k) == 0 {
+			if index == len(s.tempVar)-1 {
+				s.tempVar = s.tempVar[:index]
+			} else {
+				for a := index; a < len(s.tempVar)-1; a++ {
+					s.tempVar[a] = s.tempVar[a+1]
+				}
+			}
+			return
+		}
+	}
+}
+
+//  临时变量一一替换
+func (s *Selector) ReplaceStringAccordingToTempVar(k string) (r string) {
+	r = k
+	for index := range s.tempVar {
+		pair := s.tempVar[index]
+		if pair.IsRegExp {
+			r = s.ReplaceStringAccordingToTempReg(r, pair)
+		} else {
+			r = strings.ReplaceAll(r, pair.K, pair.V)
+		}
+	}
+	return
+}
+
+// 正则替换
+func (s *Selector) ReplaceStringAccordingToTempReg(str string, pair Pair) (raw string) {
+	go func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+	raw = str
+	rule := pair.K	// 规则也需要进行迁移
+	ruleV := pair.V
+	fmt.Print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+	// $n = $0...$9
+	for i := 0; i <= 9; i++ {
+		mark := "$" + strconv.Itoa(i)
+		rStr := strings.ReplaceAll(rule, mark, ".+?")
+		rcStr := "(?<=" + strings.ReplaceAll(rule, mark, ").+?(?=") + ")"
+
+		low := strconv.Itoa(int(math.Max(float64(i-1), float64(0))))
+		high := strconv.Itoa(int(math.Min(float64(i+1), float64(9))))
+		allMark, err := regexp.Compile(`\$([0-` + low + high + `-9])`)
+		if err != nil {
+			panic(err)
+		}
+		rStr = allMark.ReplaceAllString(rStr, ".+?")
+		rcStr = allMark.ReplaceAllString(rcStr, ".+?")
+
+		Rn, err := regexp2.Compile(rStr, 0)
+		if err != nil {
+			panic(err)
+		}
+		Rcn, err := regexp2.Compile(rcStr, 0)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("R"+mark, Rn)
+		fmt.Println("Rc"+mark, Rcn)
+
+		fmt.Println("raw in "+mark, raw)
+		MRn, err := Rn.FindStringMatch(raw)
+		MRcn, err := Rcn.FindStringMatch(raw)
+		if err != nil {
+			panic(err)
+		}
+		if MRn != nil && MRcn != nil {
+			fmt.Println("MR"+mark, MRn)
+			fmt.Println("MRc"+mark, MRcn)
+
+			var R []string
+			for _, v := range MRcn.Groups()[0].Captures {
+				R = append(R, strings.ReplaceAll(pair.V, mark, v.String()))
+			}
+			fmt.Println("R", R)
+
+			for i, v := range MRn.Groups()[0].Captures {
+				raw = strings.ReplaceAll(raw, v.String(), R[i])
+			}
+			fmt.Println("raw", raw)
+
+			// 规则的映射
+			rule = strings.ReplaceAll(ruleV, mark, ".+")
+			ruleV = rule
+		}
+	}
+	return
+}
+
 // 添加新的项目
-func (s *Selector) AddNewItem(qus string, ans []string){
+func (s *Selector) AddNewItem(qus string, ans []string) {
 	if _, ok := selector.batch.GetAllQus()[qus]; !ok {
 		s.Batch().WriteQus(qus, ans)
 		s.score[qus] = 1
 		s.lastWrongN[qus] = -1
 		s.hotFactor[qus] = 1.5
-		s.lastN[qus] = 0
+		s.lastN[qus] = 1
 		s.arraySet = append(s.arraySet, qus)
 	}
 	selector.batch.WriteQus(qus, ans)
@@ -160,11 +281,11 @@ func (s *Selector) NextItem() (*Item, int) {
 		i := s.next(s.i)
 		var qus string
 		for {
-		qus = s.arraySet[i]
-		if s.score[qus] > 0 {
-			break
-		}
-		i = s.next(i)
+			qus = s.arraySet[i]
+			if s.score[qus] > 0 {
+				break
+			}
+			i = s.next(i)
 		}
 		return NewItem(qus, s.batch.GetAllQus()[qus]), i
 	}
@@ -190,7 +311,7 @@ func (s *Selector) DispatchCoefficient(name string) float64 {
 
 // 获取调度系数字符串
 func (s *Selector) DispatchCoefficientString(name string) string {
-	return strconv.FormatFloat(selector.DispatchCoefficient(name),'f',2,64)
+	return strconv.FormatFloat(selector.DispatchCoefficient(name), 'f', 2, 64)
 }
 
 // 找到调度系数最小的项名称, 每次选择hotFactor最小的弹出来
@@ -208,20 +329,23 @@ func (s *Selector) MinHotFactorItemName() string {
 func (s *Selector) CalcDispatchCoefficient(q float64, correct bool) float64 {
 	name := s.curItem.Qus
 	s.n++
+	if s.lastN[name] == -1 {
+		s.lastN[name] = s.n
+	}
 	if correct {
 		if s.lastWrongN[name] == -1 {
-			s.hotFactor[name] += q *  1.0
+			s.hotFactor[name] += q * 1.0
 		} else {
-			s.hotFactor[name] += q *  float64(s.n - s.lastN[name])
+			s.hotFactor[name] += q * float64(s.n-s.lastN[name])
 		}
 	} else {
 		s.lastWrongN[name] = s.n
-		s.hotFactor[name] *= math.Exp(-C0 * float64(s.n - s.lastN[name]))
+		s.hotFactor[name] *= math.Exp(-C0 * float64(s.n-s.lastN[name]))
 	}
-	s.lastN[s.curItem.Qus] = s.n
+	s.lastN[name] = s.n
 	// 其他项目, 没有出现错误的是-1, 不需要进行计算
 	for qus := range s.hotFactor {
-		if qus != name && s.lastWrongN[qus] != -1 && !s.IsFinish(s.hotFactor[qus]){
+		if qus != name && s.lastWrongN[qus] != -1 && !s.IsFinish(s.hotFactor[qus]) {
 			s.hotFactor[qus] *= math.Exp(-C * float64(s.n-s.lastN[qus]))
 		}
 	}
@@ -264,7 +388,7 @@ func (s *Selector) SetScore(itemName string, v int) {
 }
 
 // 执行命令
-func (s *Selector) ExecuteBeforeFuncFromItem(item *Item){
+func (s *Selector) ExecuteBeforeFuncFromItem(item *Item) {
 	for _, action := range item.ActionBefore {
 		action.Func(s, action.Param)
 	}
@@ -275,13 +399,22 @@ func (s *Selector) ExecuteBeforeFunc() {
 	s.ExecuteBeforeFuncFromItem(item)
 }
 
-func (s *Selector) ExecuteMidFunc() {
-	for _, action := range s.curItem.ActionMid{
+func (s *Selector) ExecuteMidFuncFromItem(item *Item) {
+	for _, action := range item.ActionMid {
 		action.Func(s, action.Param)
 	}
 }
-func (s *Selector) ExecuteAfterFunc() {
-	for _, action := range s.curItem.ActionAfter{
+
+func (s *Selector) ExecuteMidFunc() {
+	s.ExecuteMidFuncFromItem(s.curItem)
+}
+
+func (s *Selector) ExecuteAfterFuncFromItem(item *Item) {
+	for _, action := range item.ActionAfter {
 		action.Func(s, action.Param)
 	}
+}
+
+func (s *Selector) ExecuteAfterFunc() {
+	s.ExecuteAfterFuncFromItem(s.curItem)
 }

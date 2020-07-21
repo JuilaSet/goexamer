@@ -57,14 +57,38 @@ func InitBeforeActionFunc(){
 		value = strings.ReplaceAll(value, utils.CurQusPrefix, item.Qus)
 		selector.DeductItem(value, -1)
 	}
+	beforeActionFuncMap["def"] = func(selector *Selector, params []string){
+		name, value := params[0], params[1]
+		selector.SetTempVar(name, value, true, false)
+	}
+	beforeActionFuncMap["defReg"] = func(selector *Selector, params []string){
+		name, value := params[0], params[1]
+		selector.SetTempVar(name, value, true, true)
+	}
+	beforeActionFuncMap["appDef"] = func(selector *Selector, params []string){
+		name, value := params[0], params[1]
+		selector.SetTempVar(name, value, false, false)
+	}
+	beforeActionFuncMap["undef"] = func(selector *Selector, params []string){
+		name := params[0]
+		selector.RemoveTempVar(name)
+	}
 }
 
 func InitMidActionFunc() {
 	midActionFuncMap["qus"] = func(selector *Selector, params []string) {
-		output.Println(strings.Join(params, ":"))
+		var lines []string
+		for _, v := range params {
+			lines = append(lines, selector.ReplaceStringAccordingToTempVar(v))
+		}
+		output.Println(strings.Join(lines, ":"))
 	}
 	midActionFuncMap["ext"] = func(selector *Selector, params []string) {
-		output.Println(strings.Join(params, ":"))
+		var lines []string
+		for _, v := range params {
+			lines = append(lines, selector.ReplaceStringAccordingToTempVar(v))
+		}
+		output.Println(strings.Join(lines, ":"))
 	}
 }
 
@@ -80,9 +104,17 @@ func InitAfterActionFunc() {
 		}
 	}
 	afterActionFuncMap["ext"] = func(selector *Selector, params []string) {
-		output.Println(strings.Join(params, ":"))
+		var lines []string
+		for _, v := range params {
+			lines = append(lines, selector.ReplaceStringAccordingToTempVar(v))
+		}
+		output.Println(strings.Join(lines, ":"))
 	}
 	afterActionFuncMap["line"] = func(selector *Selector, params []string) {
-		output.Println(strings.Join(params, ""))
+		var lines []string
+		for _, v := range params {
+			lines = append(lines, selector.ReplaceStringAccordingToTempVar(v))
+		}
+		output.Println(strings.Join(lines, ""))
 	}
 }

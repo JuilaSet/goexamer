@@ -42,13 +42,13 @@ func HelpBatchMsg() {
 
 func Start(s *Selector) {
 	selector = s
-	Init()
-	Batch()
+	RestartBatch()
 }
 
-func Init() {
+func RestartBatch() {
 	selector.Init()
 	output.Clear()
+	Batch()
 }
 
 func BatchName() {
@@ -58,18 +58,17 @@ func BatchName() {
 func Batch() {
 	batch := selector.Batch()
 	item := NewItem(batch.Name, batch.Lines())
-	selector.SetCurItemDangerous(item)
+	selector.ExecuteBeforeFuncFromItem(item)
 	batchMsg = "======================\n" +
-	" chapter: " + item.Qus + "\n"
+	" chapter: " + selector.ReplaceStringAccordingToTempVar(item.Qus) + "\n"
 	for _, line := range item.ActionAfter {
 		if line.Name == "line" {
 			batchMsg += " " + line.Param[0] + "\n"
 		}
 	}
 	batchMsg += "======================" + "\n"
-	selector.ExecuteBeforeFunc()
-	selector.ExecuteMidFunc()
-	selector.ExecuteAfterFunc()
+	selector.ExecuteMidFuncFromItem(item)
+	selector.ExecuteAfterFuncFromItem(item)
 }
 
 func Title() {
@@ -96,7 +95,8 @@ func ItemQus() {
 	selector.SetNext(selector.MinHotFactorItemName())
 	selector.ExecuteBeforeFunc()
 	item, totalCount := selector.PopItem(), len(selector.Batch().GetAllQus())
-	output.Println("(" + strconv.Itoa(selector.FinishCount()) + "/" + strconv.Itoa(totalCount) + ")question^" + selector.DispatchCoefficientString(item.Qus) + ":" + item.Qus)
+	output.Println("(" + strconv.Itoa(selector.FinishCount()) + "/" + strconv.Itoa(totalCount) + ")question^" +
+		selector.DispatchCoefficientString(item.Qus) + ":" + selector.ReplaceStringAccordingToTempVar(item.Qus))
 	selector.ExecuteMidFunc()
 }
 
